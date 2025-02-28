@@ -280,6 +280,9 @@ class GridWorldEnvironment(Environment):
         if state_id is None:
             state_id = self.state_to_index(state)
         return state_r[state_id]
+    
+
+
 class WindyGrid(GridWorldEnvironment):
     def __init__(self, env_type, size, prop=0, gamma=0.99,wind_prob=[0.25,0.25,0.25,0.25]):
         #GridWorldEnvironment.__init__(self,env_type, size, prop, gamma)
@@ -420,6 +423,8 @@ class WindyGrid(GridWorldEnvironment):
         for i_action in range(self.n_actions):
             self.sparseT[i_action] = sparse.csr_matrix(self.T[i_action])
         self.n_states = self.size**2*4
+
+
 class OWObject(object):
     """
     Object in objectworld.
