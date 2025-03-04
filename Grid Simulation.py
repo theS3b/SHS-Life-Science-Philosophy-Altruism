@@ -1,8 +1,12 @@
 import random
 import math
+
+import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import matplotlib.patches as patches
+from matplotlib.widgets import Button
+
 
 # --------------------------
 # Simulation code
@@ -24,7 +28,7 @@ class HexSimulation:
         else:
             self.grid = [[None for _ in range(cols)] for _ in range(rows)]
     
-    def get_neighbors(self, r, c):
+    def get_neighbors(self, r, c, border_connected=True):
         """
         Returns valid neighbor coordinates using an 'even-r' style offset,
         though the exact offsets may differ from the typical pointy-top standard.
@@ -39,6 +43,8 @@ class HexSimulation:
         neighbors = []
         for dr, dc in directions:
             nr, nc = r + dr, c + dc
+            if border_connected:
+                nr, nc = nr%self.rows, nc%self.cols
             if 0 <= nr < self.rows and 0 <= nc < self.cols:
                 neighbors.append((nr, nc))
         return neighbors
@@ -88,7 +94,7 @@ class HexSimulation:
         from some enemy population, then each enemy cell (attacker) has a chance 
         to attack.
         """
-        bonus_total = 1.0  # Total bonus to share if the defender dies.
+        bonus_total = 0.5  # Total bonus to share if the defender dies.
         # Loop over each cell as potential defender.
         for r in range(self.rows):
             for c in range(self.cols):
@@ -254,7 +260,11 @@ def run_visual_simulation(sim, hex_size=1.0, interval=500, iterations=100):
     ax.set_xlim(min(xs) - hex_size, max(xs) + hex_size)
     ax.set_ylim(min(ys) - hex_size, max(ys) + hex_size)
     ax.axis('off')
-    
+
+    current_iteration = 0
+
+    running = False  # State to track if the simulation is running automatically
+
     def update(frame):
         # Run one simulation step.
         sim.step()
@@ -264,37 +274,69 @@ def run_visual_simulation(sim, hex_size=1.0, interval=500, iterations=100):
             if cell is None:
                 patch.set_facecolor("white")
             else:
-                # The population's key (e.g., "red", "blue", "green") is used as the color name.
                 patch.set_facecolor(cell["pop"])
         ax.set_title(f"Iteration {frame}")
-        return []
-    
-    ani = animation.FuncAnimation(
-        fig, update, frames=iterations, interval=interval,
-        blit=False, repeat=False
-    )
+        plt.draw()
+
+    def run_simulation(event):
+        nonlocal current_iteration, running
+        running = True
+        while current_iteration < iterations and running:
+            current_iteration += 1
+            update(current_iteration)
+            plt.pause(interval*0.001)  # Control the speed of the automatic progression
+
+    def next_step(event):
+        nonlocal current_iteration
+        if current_iteration < iterations:
+            current_iteration += 1
+            update(current_iteration)
+
+    def pause_simulation(event):
+        nonlocal running
+        running = False
+
+    # Add buttons for controlling the simulation
+    button_width = 0.15
+
+    ax_button_run = plt.axes([0.4, 0.01, button_width, 0.075])  # Run button position
+    button_run = Button(ax_button_run, 'Run')
+    button_run.on_clicked(run_simulation)
+
+    ax_button_next = plt.axes([0.6, 0.01, button_width, 0.075])  # Next Step button position
+    button_next = Button(ax_button_next, 'Next Step')
+    button_next.on_clicked(next_step)
+
+    ax_button_pause = plt.axes([0.8, 0.01, button_width, 0.075])  # Pause button position
+    button_pause = Button(ax_button_pause, 'Pause')
+    button_pause.on_clicked(pause_simulation)
+
     plt.show()
 
 
 # --------------------------
 # Main block: setup simulation and run visualization
 # --------------------------
+
+
 if __name__ == "__main__":
+    matplotlib.use("TkAgg")
     # Define populations with altruism p, plus normal-distribution parameters (mean_v, std_v).
     populations = {
-        "red":   {"p": 0.8, "mean_v": 1.0, "std_v": 0.3},
-        "blue":  {"p": 0.3, "mean_v": 1.0, "std_v": 0.3},
-        "green": {"p": 0.5, "mean_v": 1.0, "std_v": 0.3}
+        "red": {"p": 0.8, "mean_v": 1.0, "std_v": 0.3},
+        "blue": {"p": 0.3, "mean_v": 1.3, "std_v": 0.3},
+        "green": {"p": 0.5, "mean_v": 1.1, "std_v": 0.3}
     }
 
     rows, cols = 50, 50
     sim = HexSimulation(rows, cols, populations)
 
     # Randomly initialize 10% of the cells with random populations.
-    random_init(sim, populations, density=0.1)
+    random_init(sim, populations, density=0.05)
 
     print("Initial grid:")
     sim.print_grid()
 
     # Run the animated visualization for 100 steps.
-    run_visual_simulation(sim, hex_size=1.0, interval=100, iterations=100)
+    run_visual_simulation(sim, hex_size=4.0, interval=100, iterations=1000)
+
