@@ -98,6 +98,8 @@ class SquareSimulation:
     def manage_donations(self, flat_grid, action_grid):
 
         shifted_action = action_grid - 1
+        shifted_action = shifted_action.unsqueeze(1)
+
         up = torch.roll(torch.where(shifted_action == 0, flat_grid, 0), shifts=-1, dims=2)
         up_right = torch.roll(torch.where(shifted_action == 1, flat_grid, 0), shifts=(-1, 1), dims=(2, 3))
         right = torch.roll(torch.where(shifted_action == 2, flat_grid, 0), shifts=1, dims=3)
@@ -140,16 +142,17 @@ class SquareSimulation:
                 (1, 0), (1, -1), (0, -1), (-1, -1)]
 
         # Process each direction separately
-        iterations = enumerate(shifts)
+        iterations = list(enumerate(shifts))
 
         # Avoid bias of attacking in one direction first
-        random.shuffle(list(iterations))
+        random.shuffle(iterations)
         
         for i, (shift_row, shift_col) in iterations:
             # Create mask for cells whose shifted_action equals this direction (attack events)
-            mask = (shifted_action == i)
-            if mask.sum() == 0:
-                continue  # No attack events in this direction
+            mask = (shifted_action == i).unsqueeze(1)  # shape: [batch, 1, rows, cols]
+
+            # if mask.sum() == 0:
+            #     continue  # No attack events in this direction
             
             # Get attacker values from flat_grid where attack occurs.
             attacker_vals = torch.where(mask, flat_grid, torch.zeros_like(flat_grid))
@@ -228,6 +231,19 @@ class SquareSimulation:
             print(line)
             print()
 
+def random_action_grid(nb_batch, rows, cols, device):
+    """Generates a random action grid for the simulation."""
+    # Generate random actions (0-16) for each cell in the grid
+    action_grid = torch.zeros((nb_batch, rows, cols), dtype=torch.float32, device=device)
+
+    # Small percentage are mapped to 1-8 (donations)
+    random_choice = torch.randint(1, 100, (nb_batch, rows, cols), device=device).float()
+    
+    action_grid = torch.where(random_choice > 16, 0, random_choice)  # 0: do nothing
+
+    return action_grid
+
+
 
 def random_initial_grid(simulation, populations, nb_batches, rows, cols, device):
     # Vectorized grid initialization
@@ -295,8 +311,8 @@ def main():
 
     # Run the simulation for a few steps
     time_now = time.time()
-    for _ in range(50):
-        action_grid = torch.randint(0, 17, (1, rows, cols), device=device)  # Random actions
+    for _ in range(10):
+        action_grid = torch.randint(0, 17, (nb_batches, rows, cols), device=device)  # Random actions
         simulation.step(action_grid)
 
     time_elapsed = time.time() - time_now
