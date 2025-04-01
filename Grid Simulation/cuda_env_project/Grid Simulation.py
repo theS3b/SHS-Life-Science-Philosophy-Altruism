@@ -80,12 +80,8 @@ def run_visual_simulation_grid(simulation, interval=500, iterations=100, populat
 
     def update(frame):
         action_grid = random_action_grid(simulation.batch_size, simulation.rows, simulation.cols, simulation.device)
-        print("Action grid:", action_grid[0].sum())
 
-        initial_grid = simulation.grid[0].clone()  # Store the initial grid for this batch
         simulation.step(action_grid)  # Run one simulation step (assumes simulation.step() updates simulation.grid)
-        print("Difference between initial and current grid:")
-        print(torch.sum(initial_grid != simulation.grid[0]))  # Print the number of changed cells
 
         nonlocal current_iteration
         current_iteration += 1
