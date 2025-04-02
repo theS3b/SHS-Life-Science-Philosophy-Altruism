@@ -70,8 +70,6 @@ class SquareSimulation:
         empty_cells_expanded = empty_cells.expand(self.batch_size, self.number_of_populations, self.rows, self.cols)  # Expand to match the number of populations
         new_fitness[~empty_cells_expanded] = 0
 
-        print(new_fitness[empty_cells_expanded].mean())
-
         # Keep only the maximum fitness value for each batch and cell
         # Step 1: Find the maximum value and its index for each batch
         _, max_indices = torch.max(new_fitness, dim=1, keepdim=True)
@@ -120,8 +118,10 @@ class SquareSimulation:
         contributions = up + up_right + right + down_right + down + down_left + left + up_left
         contributions = contributions * self.FITNESS_DONATION  # Scale by donation percentage
 
+        # WARNING! If you donate to empty cell, you just loose fitness so this is not really a zero sum game
         # Remap to original dimensions
-        new_grid = self.grid + (self.grid > SquareSimulation.EPS) * contributions  # Add contributions only to non-empty cells
+        contributions_mapped = (self.grid > SquareSimulation.EPS) * contributions  # Add contributions only to non-empty cells
+        new_grid = self.grid + contributions_mapped
 
         # Decrease by 10% for the cells that gave fitness
         new_grid = torch.where((shifted_action >= 0) & (shifted_action <= 7), new_grid * (1 - self.FITNESS_DONATION), new_grid)
@@ -157,9 +157,6 @@ class SquareSimulation:
         for i, (shift_row, shift_col) in iterations:
             # Create mask for cells whose shifted_action equals this direction (attack events)
             mask = (shifted_action == i).unsqueeze(1)  # shape: [batch, 1, rows, cols]
-
-            # if mask.sum() == 0:
-            #     continue  # No attack events in this direction
             
             # Get attacker values from flat_grid where attack occurs.
             attacker_vals = torch.where(mask, flat_grid, torch.zeros_like(flat_grid))
@@ -330,8 +327,6 @@ def main():
 
     # Initialize the grid with random populations
     random_initial_grid(simulation, populations, nb_batches, rows, cols, device)
-
-    print("Start")
 
     # Run the simulation for a few steps
     time_now = time.time()
