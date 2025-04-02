@@ -13,7 +13,7 @@ except NameError:
 
 class SquareSimulation:
     FITNESS_DONATION = 0.1  # Percentage of fitness donated to the neighbor
-    EPS = 1e-6
+    EPS = SquareSimulation.EPS
     COLONIZE_PROB_ONE = 2 # 2 fitness for prob 100% of colonization
 
     def __init__(self, nb_batch, rows, cols, populations, device, initial_grid=None):
@@ -135,7 +135,7 @@ class SquareSimulation:
         # Get the directional index (0 to 7) for attack actions:
         shifted_action = (action_grid - 9)
 
-        empty_cells = (flat_grid <= 1e-6).all(dim=1)  # shape: [batch, rows, cols]
+        empty_cells = (flat_grid <= SquareSimulation.EPS).all(dim=1)  # shape: [batch, rows, cols]
 
         nb_existing_neighbors = torch.nn.functional.conv2d(
             nn.CircularPad2d(1)((~empty_cells).float()).unsqueeze(1),
@@ -176,14 +176,14 @@ class SquareSimulation:
             vals_mapped_to_defender = torch.roll(vals, shifts=(shift_row, shift_col), dims=(2, 3))
             flat_grid = torch.where(defender_mask, flat_grid - vals_mapped_to_defender, flat_grid)
 
-            attacker_dying_cells = (flat_grid <= 1e-6) & mask
-            defender_dying_cells = (flat_grid <= 1e-6) & defender_mask
+            attacker_dying_cells = (flat_grid <= SquareSimulation.EPS) & mask
+            defender_dying_cells = (flat_grid <= SquareSimulation.EPS) & defender_mask
 
             bonus = torch.zeros_like(flat_grid)  # Reset bonus for each direction
             bonus[attacker_dying_cells] = vals[attacker_dying_cells]  # Assign bonus to dying cells
             bonus[defender_dying_cells] = vals_mapped_to_defender[defender_dying_cells]  # Assign bonus to dying cells
 
-            bonus = bonus / nb_existing_neighbors.clamp(min=1e-6)  # Avoid division by zero
+            bonus = bonus / nb_existing_neighbors.clamp(min=SquareSimulation.EPS)  # Avoid division by zero
 
             # Distribute bonus using convolution with circular padding.
             distributed_bonus = torch.nn.functional.conv2d(
