@@ -13,7 +13,7 @@ except NameError:
 
 class SquareSimulation:
     FITNESS_DONATION = 0.1  # Percentage of fitness donated to the neighbor
-    EPS = SquareSimulation.EPS
+    EPS = 1e-6
     COLONIZE_PROB_ONE = 2 # 2 fitness for prob 100% of colonization
 
     def __init__(self, nb_batch, rows, cols, populations, device, initial_grid=None):
