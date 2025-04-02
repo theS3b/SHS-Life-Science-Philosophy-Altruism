@@ -26,11 +26,15 @@ def get_batch0_labels(simulation):
     :return: A NumPy array of shape (rows, cols) with integer labels.
     """
     grid0 = simulation.grid[0].cpu().numpy()  # shape: (num_populations, rows, cols)
+
     # For each cell, select the channel with the maximum value.
-    labels = grid0.argmax(axis=0)
+    labels = grid0.argmax(axis=0) + 1  # +1 to shift labels from 0 to 1,2,...
+
     # Identify empty cells (where the sum over channels is 0) and mark them as -1.
     empty_mask = grid0.sum(axis=0) == 0
-    labels[empty_mask] = -1
+
+    labels[empty_mask] = 0
+
     return labels
 
 # --------------------------
@@ -53,7 +57,7 @@ def run_visual_simulation_grid(simulation, interval=500, iterations=100, populat
     """
     if population_colors is None:
         # Default colors; ensure that the order corresponds to the channel indices in simulation.pop_ids.
-        population_colors = ['red', 'blue', 'green']
+        population_colors = ['white', 'red', 'blue', 'green']
         
     # Create a colormap for the populations.
     # Note: The imshow will display integer labels 0, 1, 2,... using these colors.
@@ -82,6 +86,9 @@ def run_visual_simulation_grid(simulation, interval=500, iterations=100, populat
         action_grid = random_action_grid(simulation.batch_size, simulation.rows, simulation.cols, simulation.device)
 
         simulation.step(action_grid)  # Run one simulation step (assumes simulation.step() updates simulation.grid)
+
+        nb_empty_cells = (simulation.grid[0].sum(dim=0) < 1e-6).sum().item()
+        print(f"Iteration: {nb_empty_cells} empty cells")
 
         nonlocal current_iteration
         current_iteration += 1
@@ -133,9 +140,9 @@ if __name__ == "__main__":
     nb_batches = 100
     rows, cols = 50, 50
     populations = {
-        "red": {"p": 0.2, "mean_v": 1.0, "std_v": 0.2},
-        "blue": {"p": 0.3, "mean_v": 1.0, "std_v": 0.2},
-        "green": {"p": 0.3, "mean_v": 1.0, "std_v": 0.2},
+        "red": {"p": 0.1, "mean_v": 1.0, "std_v": 0.2},
+        "blue": {"p": 0.1, "mean_v": 1.0, "std_v": 0.2},
+        "green": {"p": 0.1, "mean_v": 1.0, "std_v": 0.2},
     }
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     

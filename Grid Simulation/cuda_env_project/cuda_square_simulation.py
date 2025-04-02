@@ -14,6 +14,7 @@ except NameError:
 class SquareSimulation:
     FITNESS_DONATION = 0.1  # Percentage of fitness donated to the neighbor
     EPS = 1e-6
+    COLONIZE_PROB_ONE = 2 # 2 fitness for prob 100% of colonization
 
     def __init__(self, nb_batch, rows, cols, populations, device, initial_grid=None):
         """
@@ -64,9 +65,12 @@ class SquareSimulation:
         # Apply depthwise convolution: groups = number of channels
         new_fitness = torch.nn.functional.conv2d(grid_padded, kernel, stride=1, padding=0, groups=self.number_of_populations)
 
+
         # Set fitness to 0 where the cell is not empty
         empty_cells_expanded = empty_cells.expand(self.batch_size, self.number_of_populations, self.rows, self.cols)  # Expand to match the number of populations
         new_fitness[~empty_cells_expanded] = 0
+
+        print(new_fitness[empty_cells_expanded].mean())
 
         # Keep only the maximum fitness value for each batch and cell
         # Step 1: Find the maximum value and its index for each batch
@@ -77,6 +81,9 @@ class SquareSimulation:
 
         # Step 3: Zero out everything that's not the max
         new_fitnesses_only = new_fitness * mask.float()
+
+        uniform_rand = SquareSimulation.COLONIZE_PROB_ONE * torch.rand_like(new_fitnesses_only)  # shape: (batch, 1, rows, cols)
+        new_fitnesses_only = torch.where(uniform_rand < new_fitnesses_only, new_fitnesses_only, torch.zeros_like(new_fitnesses_only))
 
         # Update the grid with the new fitness values
         self.grid = self.grid + new_fitnesses_only  # Add the new fitness values to the grid
@@ -272,13 +279,14 @@ def random_initial_grid(simulation, populations, nb_batches, rows, cols, device)
 
         thresholds = torch.tensor([
             probs["red"],
-            probs["red"] + probs["blue"]
-        ], device=device).view(1, 2, 1, 1)
+            probs["red"] + probs["blue"],
+            probs["red"] + probs["blue"] + probs["green"]
+        ], device=device).view(1, 3, 1, 1)
 
         # Classify cells
         is_red = rand_vals < thresholds[:, 0, :, :]
         is_blue = (rand_vals >= thresholds[:, 0, :, :]) & (rand_vals < thresholds[:, 1, :, :])
-        is_green = rand_vals >= thresholds[:, 1, :, :]
+        is_green = (rand_vals >= thresholds[:, 1, :, :]) & (rand_vals < thresholds[:, 2, :, :])
 
         # Sample values for each population
         red_vals = torch.normal(means["red"], stds["red"], size=(nb_batches, rows, cols), device=device)
@@ -289,6 +297,22 @@ def random_initial_grid(simulation, populations, nb_batches, rows, cols, device)
         simulation.grid[:, simulation.pop_ids["blue"]] = blue_vals * is_blue
         simulation.grid[:, simulation.pop_ids["green"]] = green_vals * is_green
 
+        # Keep only the maximum fitness value for each batch and cell
+        # Step 1: Find the maximum value and its index for each batch
+        _, max_indices = torch.max(simulation.grid, dim=1, keepdim=True)
+
+        # Step 2: Create a mask that is True where the max occurs
+        mask = torch.arange(simulation.grid.size(1), device=simulation.grid.device).view(1, -1, 1, 1) == max_indices
+
+        # Step 3: Zero out everything that's not the max
+        new_fitnesses_only = simulation.grid * mask.float()
+
+        # Update the grid with the new fitness values
+        simulation.grid = new_fitnesses_only
+
+        # Ensure no negative values
+        simulation.grid = torch.where(simulation.grid < 0, 0, simulation.grid)
+
 
 # Example usage:
 def main():
@@ -298,8 +322,8 @@ def main():
     rows, cols = 50, 50
     populations = {
         "red": {"p": 0.2, "mean_v": 1.0, "std_v": 0.2},
-        "blue": {"p": 0.3, "mean_v": 1.0, "std_v": 0.2},
-        "green": {"p": 0.3, "mean_v": 1.0, "std_v": 0.2},
+        "blue": {"p": 0.2, "mean_v": 1.0, "std_v": 0.2},
+        "green": {"p": 0.2, "mean_v": 1.0, "std_v": 0.2},
     }
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     simulation = SquareSimulation(nb_batch=nb_batches, rows=rows, cols=cols, populations=populations, device=device)
