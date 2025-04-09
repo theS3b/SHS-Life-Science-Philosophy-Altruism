@@ -26,7 +26,7 @@ class Actions(Enum):
     attack_left = 15
     attack_up_left = 16
 
-class GridWorldEnv(gym.Env):
+class SquareAdaptedGymSimulation(gym.Env):
     metadata = {"render_modes": ["human", "rgb_array"], "max_fitness": 2.0, "min_fitness": 0.0}
 
     def __init__(self, efficient_environment, observation_size, render_mode=None):
