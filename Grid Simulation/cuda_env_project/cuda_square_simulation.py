@@ -2,6 +2,7 @@ import random
 import numpy as np
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 import time
 
 # Dummy profile decorator for when not using kernprof
@@ -214,6 +215,30 @@ class SquareSimulation:
         """Run the simulation for a given number of iterations."""
         for _ in range(iterations):
             self.step()
+
+    def get_deep_observations(self, population_id):
+        B, C, H, W = self.grid.shape
+        obs_size = 5
+
+        # Get indices of interest
+        indices = torch.nonzero(self.grid[:, population_id, ...], as_tuple=False)  # shape: (N, 3)
+        batch_idx, y_idx, x_idx = indices[:, 0], indices[:, 1], indices[:, 2]
+
+        # Pad the spatial dims (H, W) with 2 pixels on each side
+        padded = nn.CircularPad2d(obs_size // 2)(self.grid)  # shape: (B, C, H + obs_size - 1, W + obs_size - 1)
+
+        # Use unfold to get all 5x5 patches from each image in batch
+        # unfold returns shape (B, 25, (H * W))
+        patches = F.unfold(padded, kernel_size=obs_size)  # shape: (B, C * obs_size * obs_size, H * W)
+
+        patches_ = patches.view(B, C, obs_size*obs_size, H, W)  # shape: (B, C, 25, H, W)
+
+        # Get the patches corresponding to the indices of interest
+        patches_of_interest = patches_[batch_idx, :, :, y_idx, x_idx]  # shape: (N, C, 25)
+        
+        # Reshape to (N, C, obs_size, obs_size)
+        patches_of_interest = patches_of_interest.view(-1, C, obs_size, obs_size)  # shape: (N, C, 5, 5)
+
 
     def print_grid(self):
         """
