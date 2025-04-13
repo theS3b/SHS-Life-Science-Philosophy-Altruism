@@ -76,25 +76,22 @@ class SquareAdaptedGymSimulation(gym.Env):
         # Perform the environment step using the full actions.
         # We assume your underlying step returns reward, done, info.
         # (They can be torch tensors as well.)
-        reward, done, info = self.underlying_env.step(full_actions)
+        rewards_per_pop, dones_per_batch, info = self.underlying_env.step(full_actions)
         
         # Get new observations for the intelligent agents.
-        obs_torch = self.underlying_env.get_observations() 
-
-        # Expected shape: (nb_batch * n, 3, 5, 5)
-        obs_numpy = obs_torch.cpu().numpy()
+        observations_per_population = [self.underlying_env.get_deep_observations(i).cpu().numpy() for i in range(self.underlying_env.number_of_populations)]
         
         # Similarly convert rewards and dones to NumPy.
-        reward_numpy = reward.cpu().numpy()
+        reward_numpy = rewards_per_pop.cpu().numpy()
         
-        done_numpy = done.cpu().numpy()
+        done_numpy = dones_per_batch.cpu().numpy()
         
         # Gymnasium step() now should return:
         # obs, reward, terminated, truncated, info.
         terminated = done_numpy
         truncated = False   # can be customized based on a time limit, etc.
         
-        return obs_numpy, reward_numpy, terminated, truncated, info
+        return observations_per_population, reward_numpy, terminated, truncated, info
 
     def render(self, mode="human", batch_id=0, pause_time_s=0.05):
         """
