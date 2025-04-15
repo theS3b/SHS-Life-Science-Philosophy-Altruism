@@ -2,7 +2,7 @@ import torch
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import matplotlib.colors as mcolors
-from cuda_square_simulation import SquareSimulation, random_initial_grid, random_action_grid
+from cuda_square_simulation import SquareSimulation, random_initial_grid, random_action_grid, random_initial_grid_with_gaussians
 
 # Set KMP_DUPLICATE_LIB_OK to avoid errors with MKL and PyTorch
 import os
@@ -70,7 +70,8 @@ def run_visual_simulation_grid(simulation, interval=500, iterations=100, populat
     # Get the initial labels for batch 0.
     labels = get_batch0_labels(simulation)  # shape (rows, cols)
     im = ax.imshow(labels, cmap=cmap, vmin=-0.5, vmax=len(population_colors)-0.5)
-    ax.axis('off')
+    ax.set_xticks([])
+    ax.set_yticks([])
     
     current_iteration = 0
     running = False
@@ -136,12 +137,12 @@ if __name__ == "__main__":
     # - The simulation is already initialized via the vectorized random_initial_grid.
     
     # Example: define parameters and create the simulation.
-    nb_batches = 100
+    nb_batches = 10
     rows, cols = 50, 50
     populations = {
-        "red": {"p": 0.1, "mean_v": 1.0, "std_v": 0.2},
-        "blue": {"p": 0.1, "mean_v": 1.0, "std_v": 0.2},
-        "green": {"p": 0.1, "mean_v": 1.0, "std_v": 0.2},
+        "red": {"p": 0.8, "mean_v": 0.75, "std_v": 0.3},
+        "blue": {"p": 0.6, "mean_v": 1.0, "std_v": 0.5},
+        "green": {"p": 0.4, "mean_v": 1.5, "std_v": 0.1},
     }
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
@@ -153,7 +154,7 @@ if __name__ == "__main__":
                                   populations=populations, device=device)
     
     # Initialize the simulation grid (using your vectorized function).
-    random_initial_grid(simulation, populations, nb_batches, rows, cols, device)
+    random_initial_grid_with_gaussians(simulation, populations, nb_batches, rows, cols, device)
     
     # Run the visual simulation for batch 0.
     run_visual_simulation_grid(simulation, interval=50, iterations=1000)

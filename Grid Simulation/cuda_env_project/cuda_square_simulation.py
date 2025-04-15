@@ -2,7 +2,10 @@ import random
 import numpy as np
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 import time
+
+from torch.distributions.multivariate_normal import MultivariateNormal
 
 # Dummy profile decorator for when not using kernprof
 try:
@@ -14,7 +17,7 @@ except NameError:
 class SquareSimulation:
     FITNESS_DONATION = 0.1  # Percentage of fitness donated to the neighbor
     EPS = 1e-6
-    COLONIZE_PROB_ONE = 2 # 2 fitness for prob 100% of colonization
+    COLONIZE_PROB_ONE = 3 # 2 fitness for prob 100% of colonization
 
     def __init__(self, nb_batch, rows, cols, populations, device, initial_grid=None):
         """
@@ -247,8 +250,6 @@ def random_action_grid(nb_batch, rows, cols, device):
 
     return action_grid
 
-
-
 def random_initial_grid(simulation, populations, nb_batches, rows, cols, device):
     # Vectorized grid initialization
     with torch.no_grad():
@@ -310,6 +311,77 @@ def random_initial_grid(simulation, populations, nb_batches, rows, cols, device)
         # Ensure no negative values
         simulation.grid = torch.where(simulation.grid < 0, 0, simulation.grid)
 
+def random_initial_grid_with_gaussians(simulation, populations, nb_batches, rows, cols, device):
+    with torch.no_grad():
+
+        EPS = 1e-6
+        
+        nb_population = simulation.number_of_populations
+
+        # select variance and max individual in gaussian (in fct of the grid size)
+        nb_individuals = rows*cols
+        variance_gaussian = rows*cols//80
+
+        probas = torch.tensor([populations["red"]["p"], populations["blue"]["p"], populations["green"]["p"]], device=device)
+        samples_per_pop = (nb_individuals * probas).round().long()  
+
+        # Init Grid
+        simulation.grid = torch.zeros((nb_batches, nb_population, rows, cols), dtype=torch.float32, device=device)
+        
+        # Choose random center for gaussians
+        centers_y = torch.randint(0, rows, (nb_batches, nb_population), device=device)
+        centers_x = torch.randint(0, cols, (nb_batches, nb_population), device=device)
+        centers = torch.stack([centers_y, centers_x], dim=-1)  # [B, P, 2]
+
+        # Create a gaussian centered in (0,0)
+        cov = torch.eye(2, device=device) * variance_gaussian #TODO check if we want to add covariance
+        mvn = MultivariateNormal(loc=torch.zeros(2, device=device), covariance_matrix=cov)
+
+        for pop_idx, pop_sample in enumerate(samples_per_pop):
+            if pop_sample==0:
+                continue
+        
+            # Sample pop_sample random point in gaussians
+            samples = mvn.sample((nb_batches, 1, pop_sample)) # [B, 1, pop_sample, 2]
+
+            # Center the sample around the position
+            positions = centers[:, pop_idx].unsqueeze(1).unsqueeze(2) + samples  # (B, P, N, 2)
+            positions = positions.round().long()
+
+            # modulo the coordinate for periodic bound
+            positions[..., 0] = positions[..., 0] %rows
+            positions[..., 1] = positions[..., 1] %cols
+
+            #b_idx = torch.arange(nb_batches, device=device).view(-1, 1, 1).expand(-1, nb_population, nb_individuals)
+            
+            b_idx = torch.arange(nb_batches, device=device).view(-1, 1).expand(-1, pop_sample)  # [B, N]
+            p_idx = torch.full_like(b_idx, pop_idx)  # [B, N]
+            
+            # Add one to the selected grid
+            simulation.grid[b_idx.reshape(-1),
+                            p_idx.reshape(-1),
+                            positions[..., 0].reshape(-1),
+                            positions[..., 1].reshape(-1)] = 1
+        
+        # delete cell in conflicts
+        collision = (simulation.grid.sum(dim=1)==1).unsqueeze(1)
+
+        simulation.grid = simulation.grid * collision
+
+        means = {
+            "red": populations["red"]["mean_v"],
+            "blue": populations["blue"]["mean_v"],
+            "green": populations["green"]["mean_v"],
+        }
+        stds = {
+            "red": populations["red"]["std_v"],
+            "blue": populations["blue"]["std_v"],
+            "green": populations["green"]["std_v"],
+        }
+        for pop_idx, pop in enumerate(['red', 'blue', 'green']):
+            simulation.grid[:, pop_idx] *= torch.normal(mean=means[pop], std=stds[pop], size=simulation.grid[:,0].size(), device=simulation.grid.device)
+
+       
 
 # Example usage:
 def main():
