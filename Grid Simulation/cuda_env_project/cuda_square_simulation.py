@@ -18,7 +18,7 @@ class SquareSimulation:
     COLONIZE_PROB_ONE = 2 # 2 fitness for prob 100% of colonization
     REWARD_FOR_DONE = 1.0  # Reward for reaching the done condition
 
-    def __init__(self, nb_batch, rows, cols, populations, populations_descriptions, device, observation_size=5, done_population=0.9, initial_grid=None):
+    def __init__(self, nb_batch, rows, cols, populations, device, observation_size=5, done_population=0.9, initial_grid=None):
         """
         :param rows: number of rows in the grid.
         :param cols: number of columns in the grid.
@@ -47,7 +47,6 @@ class SquareSimulation:
         self.device = device
         self.CIRC_KERNEL = torch.tensor([[1, 1, 1], [1, 0, 1], [1, 1, 1]], dtype=self.grid.dtype, device=self.device).view(1, 1, 3, 3)
         self.observation_size = observation_size
-        self.populations_descriptions = populations_descriptions
         self.done_population = done_population  # Population density threshold for done condition
 
     
@@ -277,8 +276,8 @@ class SquareSimulation:
                 is_pop = (rand_vals >= thresholds[:, i-1, :, :]) & (rand_vals < thresholds[:, i, :, :])
 
             # Sample values for each population
-            mean_v = self.populations_descriptions[pop_id]["mean_v"]
-            std_v = self.populations_descriptions[pop_id]["std_v"]
+            mean_v = self.populations[pop_id]["mean_v"]
+            std_v = self.populations[pop_id]["std_v"]
             pop_vals = torch.normal(mean_v, std_v, size=(nb_batches, self.rows, self.cols), device=self.device)
 
             grid[:, self.pop_ids[pop_id]] = pop_vals * is_pop
@@ -348,8 +347,6 @@ def random_action_grid(nb_batch, rows, cols, device):
     action_grid = torch.where(random_choice > 16, 0, random_choice)  # 0: do nothing
 
     return action_grid
-
-
 
 def random_initial_grid(simulation, populations, nb_batches, rows, cols, device):
     # Vectorized grid initialization

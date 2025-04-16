@@ -3,7 +3,6 @@ import gymnasium as gym
 from gymnasium import spaces
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
-import torch
 import numpy as np
 
 
@@ -29,7 +28,7 @@ class Actions(Enum):
 class SquareAdaptedGymSimulation(gym.Env):
     metadata = {"render_modes": ["human", "rgb_array"], "max_fitness": 2.0, "min_fitness": 0.0}
 
-    def __init__(self, efficient_environment, observation_size, render_mode=None):
+    def __init__(self, efficient_environment, observation_size, clever_pop_id, render_mode=None):
         super().__init__()
 
         self.underlying_env = efficient_environment
@@ -41,11 +40,12 @@ class SquareAdaptedGymSimulation(gym.Env):
             low=self.metadata["min_fitness"],
             high=self.metadata["max_fitness"],
             shape=(self.underlying_env.number_of_populations, observation_size, observation_size),
-            dtype=torch.float32,
+            dtype=np.float32,
         )
 
         # We have the actions Actions
         self.action_space = spaces.Discrete(len(Actions))
+        self.clever_pop_id = clever_pop_id
 
         assert render_mode is None or render_mode in self.metadata["render_modes"]
         self.render_mode = render_mode
@@ -53,33 +53,32 @@ class SquareAdaptedGymSimulation(gym.Env):
     def reset(self, seed=None, options=None):
         # We need the following line to seed self.np_random
         super().reset(seed=seed)
+        
+        self.underlying_env.reset()
 
-        # TODO ADAPT
-
-        observation = self._get_obs()
-        info = self._get_info()
+        observation_clever_pop = self.underlying_env.get_deep_observations(self.clever_pop_id).cpu().numpy()
+        info = {}
+        
 
         if self.render_mode == "human":
             self._render_frame()
 
-        return observation, info
+        return observation_clever_pop, info
     
-    def step(self, actions):
-        # Here, `actions` is a NumPy array with one action per selected cell.
-        # Convert actions to a torch tensor, if needed.
-        actions_tensor = actions
-
-        # Map the per-cell actions to an action grid that is compatible with your underlying env.
-        full_actions = self._map_actions_to_grid(actions_tensor)
-        # Now full_actions should have shape: (nb_batch, rows, cols)
+    def step(self, clever_pop_actions):
+        # By default, random actions
+        actions = self.underlying_env.random_action_grid(self.underlying_env.batch_size, self.underlying_env.rows, self.underlying_env.cols, self.underlying_env.device)
+        
+        # Overwrite with the clever population's actions.
+        actions[:, self.clever_pop_id] = clever_pop_actions
         
         # Perform the environment step using the full actions.
         # We assume your underlying step returns reward, done, info.
-        # (They can be torch tensors as well.)
-        rewards_per_pop, dones_per_batch, info = self.underlying_env.step(full_actions)
+        rewards_per_pop, dones_per_batch, info = self.underlying_env.step(actions)
         
         # Get new observations for the intelligent agents.
-        observations_per_population = [self.underlying_env.get_deep_observations(i).cpu().numpy() for i in range(self.underlying_env.number_of_populations)]
+        #observations_per_population = [self.underlying_env.get_deep_observations(i).cpu().numpy() for i in range(self.underlying_env.number_of_populations)]
+        observation_clever_pop = self.underlying_env.get_deep_observations(self.clever_pop_id).cpu().numpy()
         
         # Similarly convert rewards and dones to NumPy.
         reward_numpy = rewards_per_pop.cpu().numpy()
@@ -91,7 +90,7 @@ class SquareAdaptedGymSimulation(gym.Env):
         terminated = done_numpy
         truncated = False   # can be customized based on a time limit, etc.
         
-        return observations_per_population, reward_numpy, terminated, truncated, info
+        return observation_clever_pop, reward_numpy, terminated, truncated, info
 
     def render(self, mode="human", batch_id=0, pause_time_s=0.05):
         """

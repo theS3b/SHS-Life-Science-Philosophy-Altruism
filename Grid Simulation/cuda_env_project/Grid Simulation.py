@@ -150,7 +150,7 @@ if __name__ == "__main__":
     #   - pop_ids: e.g., {"red": 0, "blue": 1, "green": 2}
     # and a method step() that updates grid.
     simulation = SquareSimulation(nb_batch=nb_batches, rows=rows, cols=cols,
-                                  populations=populations, device=device, populations_descriptions=populations)
+                                  populations=populations, device=device)
     
     # Initialize the simulation grid (using your vectorized function).
     simulation.reset()
