@@ -150,10 +150,10 @@ if __name__ == "__main__":
     #   - pop_ids: e.g., {"red": 0, "blue": 1, "green": 2}
     # and a method step() that updates grid.
     simulation = SquareSimulation(nb_batch=nb_batches, rows=rows, cols=cols,
-                                  populations=populations, device=device)
+                                  populations=populations, device=device, populations_descriptions=populations)
     
     # Initialize the simulation grid (using your vectorized function).
-    random_initial_grid(simulation, populations, nb_batches, rows, cols, device)
+    simulation.reset()
     
     # Run the visual simulation for batch 0.
     run_visual_simulation_grid(simulation, interval=50, iterations=1000)

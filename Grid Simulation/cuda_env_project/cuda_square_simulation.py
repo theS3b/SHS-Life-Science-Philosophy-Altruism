@@ -18,7 +18,7 @@ class SquareSimulation:
     COLONIZE_PROB_ONE = 2 # 2 fitness for prob 100% of colonization
     REWARD_FOR_DONE = 1.0  # Reward for reaching the done condition
 
-    def __init__(self, nb_batch, rows, cols, populations, device, observation_size=5, done_population=0.9, initial_grid=None):
+    def __init__(self, nb_batch, rows, cols, populations, populations_descriptions, device, observation_size=5, done_population=0.9, initial_grid=None):
         """
         :param rows: number of rows in the grid.
         :param cols: number of columns in the grid.
@@ -47,6 +47,8 @@ class SquareSimulation:
         self.device = device
         self.CIRC_KERNEL = torch.tensor([[1, 1, 1], [1, 0, 1], [1, 1, 1]], dtype=self.grid.dtype, device=self.device).view(1, 1, 3, 3)
         self.observation_size = observation_size
+        self.populations_descriptions = populations_descriptions
+        self.done_population = done_population  # Population density threshold for done condition
 
     
     def colonization_phase(self):
@@ -244,18 +246,44 @@ class SquareSimulation:
             # TODO @Romain: Add more info for logging
         }
 
-        # Reset done batches
-        ## TODO: reset done batches only
+        # Reset done batches only
+        self.reset(done_batch.nonzero(as_tuple=True)[0])
 
         return rewards, done_batch, info
 
     
-    def reset(self, batche_ids = None):
+    def reset(self, batch_ids = None):
         """Reset the grid for the specified batch ids."""
-        if batche_ids is None:
-            batche_ids = torch.arange(self.batch_size, device=self.device)
+        if batch_ids is None:
+            batch_ids = torch.arange(self.batch_size, device=self.device)
 
-        # TODO finish this reset function
+        nb_batches = len(batch_ids)
+
+        # Generate a uniform random grid for all batches
+        rand_vals = torch.rand((nb_batches, self.rows, self.cols), device=self.device)
+
+        # Allocate empty grid
+        grid = torch.zeros((nb_batches, self.number_of_populations, self.rows, self.cols), dtype=torch.float32, device=self.device)
+
+        probs = torch.tensor([self.populations[pop_id]["p"] for pop_id in self.pop_ids], device=self.device)
+
+        thresholds = torch.cumsum(probs).view(1, -1, 1, 1)  # shape: (1, x, 1, 1)
+        
+        # Classify cells
+        for i, pop_id in enumerate(self.pop_ids):
+            if i == 0:
+                is_pop = rand_vals < thresholds[:, i, :, :]
+            else:
+                is_pop = (rand_vals >= thresholds[:, i-1, :, :]) & (rand_vals < thresholds[:, i, :, :])
+
+            # Sample values for each population
+            mean_v = self.populations_descriptions[pop_id]["mean_v"]
+            std_v = self.populations_descriptions[pop_id]["std_v"]
+            pop_vals = torch.normal(mean_v, std_v, size=(nb_batches, self.rows, self.cols), device=self.device)
+
+            grid[:, self.pop_ids[pop_id]] = pop_vals * is_pop
+
+        self.grid[batch_ids] = grid  # Update the grid for the specified batch ids
 
 
     def run(self, iterations):
