@@ -267,7 +267,7 @@ class SquareSimulation:
 
         probs = torch.tensor([self.populations[pop_id]["p"] for pop_id in self.pop_ids], device=self.device)
 
-        thresholds = torch.cumsum(probs).view(1, -1, 1, 1)  # shape: (1, x, 1, 1)
+        thresholds = torch.cumsum(probs, dim=0).view(1, -1, 1, 1)  # shape: (1, x, 1, 1)
         
         # Classify cells
         for i, pop_id in enumerate(self.pop_ids):

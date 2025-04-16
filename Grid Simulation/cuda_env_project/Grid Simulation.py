@@ -136,8 +136,8 @@ if __name__ == "__main__":
     # - The simulation is already initialized via the vectorized random_initial_grid.
     
     # Example: define parameters and create the simulation.
-    nb_batches = 100
-    rows, cols = 50, 50
+    nb_batches = 1
+    rows, cols = 500, 500
     populations = {
         "red": {"p": 0.1, "mean_v": 1.0, "std_v": 0.2},
         "blue": {"p": 0.1, "mean_v": 1.0, "std_v": 0.2},
