@@ -2,7 +2,7 @@ import torch
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import matplotlib.colors as mcolors
-from cuda_square_simulation import SquareSimulation, random_initial_grid, random_action_grid, random_initial_grid_with_gaussians
+from cuda_square_simulation import SquareSimulation, random_initial_grid, random_action_grid, inteligent_agent_grid, random_initial_grid_with_gaussians, one_intelligent_agent_grid
 
 # Set KMP_DUPLICATE_LIB_OK to avoid errors with MKL and PyTorch
 import os
@@ -84,7 +84,8 @@ def run_visual_simulation_grid(simulation, interval=500, iterations=100, populat
         plt.draw()
 
     def update(frame):
-        action_grid = random_action_grid(simulation.batch_size, simulation.rows, simulation.cols, simulation.device)
+        action_grid = one_intelligent_agent_grid(0, simulation)
+        #action_grid = random_action_grid(simulation.batch_size, simulation.rows, simulation.cols, simulation.device)
 
         simulation.step(action_grid)  # Run one simulation step (assumes simulation.step() updates simulation.grid)
 
@@ -138,11 +139,11 @@ if __name__ == "__main__":
     
     # Example: define parameters and create the simulation.
     nb_batches = 10
-    rows, cols = 50, 50
+    rows, cols = 100, 100
     populations = {
-        "red": {"p": 0.8, "mean_v": 0.75, "std_v": 0.3},
-        "blue": {"p": 0.6, "mean_v": 1.0, "std_v": 0.5},
-        "green": {"p": 0.4, "mean_v": 1.5, "std_v": 0.1},
+        "red": {"p": 0.1, "mean_v": 1.0, "std_v": 0.1},
+        "blue": {"p": 0.1, "mean_v": 1.0, "std_v": 0.1},
+        "green": {"p": 0.1, "mean_v": 1.0, "std_v": 0.1},
     }
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
@@ -155,6 +156,7 @@ if __name__ == "__main__":
     
     # Initialize the simulation grid (using your vectorized function).
     random_initial_grid_with_gaussians(simulation, populations, nb_batches, rows, cols, device)
-    
+    #random_initial_grid(simulation, populations, nb_batches, rows, cols, device)
+
     # Run the visual simulation for batch 0.
     run_visual_simulation_grid(simulation, interval=50, iterations=1000)

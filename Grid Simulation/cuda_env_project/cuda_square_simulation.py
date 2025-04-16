@@ -16,8 +16,9 @@ except NameError:
 
 class SquareSimulation:
     FITNESS_DONATION = 0.1  # Percentage of fitness donated to the neighbor
+    FITNESS_DONATION_BONUS = 0.1
     EPS = 1e-6
-    COLONIZE_PROB_ONE = 3 # 2 fitness for prob 100% of colonization
+    COLONIZE_PROB_ONE = 1.5 # 2 fitness for prob 100% of colonization
 
     def __init__(self, nb_batch, rows, cols, populations, device, initial_grid=None):
         """
@@ -119,7 +120,7 @@ class SquareSimulation:
 
         # Combine all contributions
         contributions = up + up_right + right + down_right + down + down_left + left + up_left
-        contributions = contributions * self.FITNESS_DONATION  # Scale by donation percentage
+        contributions = contributions * (self.FITNESS_DONATION + self.FITNESS_DONATION_BONUS)  # Scale by donation percentage
 
         # WARNING! If you donate to empty cell, you just loose fitness so this is not really a zero sum game
         # Remap to original dimensions
@@ -250,6 +251,154 @@ def random_action_grid(nb_batch, rows, cols, device):
 
     return action_grid
 
+def inteligent_agent_grid(simulation):
+    """Generates a action grid where unit do not attack friends and do nit give to enemis."""
+
+    EPS = 1e-6
+    nb_batch = simulation.batch_size
+    rows = simulation.rows
+    cols = simulation.cols
+    device = simulation.device
+    nb_population = simulation.number_of_populations
+
+    # Create a tensor of every possible action
+    n_actions = 17
+
+    # Generate gaussian tensor, the idea is that argmax will be random, we can now manipulate the tab to prevent agent to do unproductive actions
+        # If action = 0, do nothing
+        # If action = 1-8, give fitness to the cell in the direction of the action
+        # If action = 9-16, attack the opponent cell
+
+    # [nb_batch, rows, cols, n_actions]
+    allowed_actions = torch.normal(mean=1.0, std=0.1, size=(nb_batch, rows, cols, n_actions), dtype=torch.float32, device=device).clamp(0)
+    # exemple : the line below prevent the agent to attack an other one
+    #allowed_actions[:,:,:, 9:] = -1
+
+    for pop_id in range(nb_population):
+
+        ally_mask = simulation.grid[:,pop_id,...] > EPS # [batch, rows, cols]
+
+        # 0: do nothing
+
+        # donnation in direction :
+        # 1: up, 2: up-right, 3: right, 4: down-right,
+        # 5: down, 6: down-left, 7: left, 8: up-left.
+
+        # attack in direction :
+        # 9: up, 10: up-right, 11: right, 12: down-right,
+        # 13: down, 14: down-left, 15: left, 16: up-left.
+
+        ally_up = torch.roll(ally_mask, shifts=1, dims=1) > EPS #up 9
+        ally_up_right = torch.roll(ally_mask, shifts=(1, -1), dims=(1, 2)) > EPS #up_right 10
+        ally_right = torch.roll(ally_mask, shifts=-1, dims=2) > EPS #right 11
+        ally_down_right = torch.roll(ally_mask, shifts=(-1, -1), dims=(1, 2)) > EPS #down_right 12
+        ally_down = torch.roll(ally_mask, shifts=-1, dims=1) > EPS # down 13
+        ally_down_left = torch.roll(ally_mask, shifts=(-1, 1), dims=(1, 2)) > EPS #down_left 14
+        ally_left = torch.roll(ally_mask, shifts=1, dims=2) > EPS #left 15
+        ally_up_left = torch.roll(ally_mask, shifts=(1, 1), dims=(1, 2)) > EPS #up_left 16
+        
+        ally_neighbors = [ally_up, ally_up_right, ally_right, ally_down_right, ally_down, ally_down_left, ally_left, ally_up_left]
+
+        for idx, n in enumerate(ally_neighbors):
+            donnation_action = idx+1
+            attack_action = idx+9
+
+            # cannot attack if the neighbors is a ally
+            direction_ally_mask  = n & ally_mask
+            b, r, c = torch.where(direction_ally_mask)
+            allowed_actions[b,r,c, attack_action] = -1
+
+            # donation if neighbors is not a ally donation is forbidden
+            b, r, c = torch.where(~n & ally_mask)
+            allowed_actions[b,r,c, donnation_action] = -1
+
+    population_mask = (simulation.grid > EPS).any(dim=1)
+
+    return allowed_actions.argmax(-1) * population_mask
+
+def intelligent_agent_population(population_id, simulation):
+    """Generates a action grid for only 1 population where unit do not attack ally and do not give to enemis."""
+
+    EPS = 1e-6
+    nb_batch = simulation.batch_size
+    rows = simulation.rows
+    cols = simulation.cols
+    device = simulation.device
+
+    # Create a tensor of every possible action
+    n_actions = 17
+
+    # Generate gaussian tensor, the idea is that argmax will be random, we can now manipulate the tab to prevent agent to do unproductive actions
+        # If action = 0, do nothing
+        # If action = 1-8, give fitness to the cell in the direction of the action
+        # If action = 9-16, attack the opponent cell
+
+    # [nb_batch, rows, cols, n_actions]
+    allowed_actions = torch.normal(mean=1.0, std=0.1, size=(nb_batch, rows, cols, n_actions), dtype=torch.float32, device=device).clamp(0)
+    # exemple : the line below prevent the agent to attack an other one
+    #allowed_actions[:,:,:, :9] = -1
+
+    ally_mask = simulation.grid[:,population_id,...] > EPS # [batch, rows, cols]
+
+    # 0: do nothing
+
+    # donnation in direction :
+    # 1: up, 2: up-right, 3: right, 4: down-right,
+    # 5: down, 6: down-left, 7: left, 8: up-left.
+
+    # attack in direction :
+    # 9: up, 10: up-right, 11: right, 12: down-right,
+    # 13: down, 14: down-left, 15: left, 16: up-left.
+
+    ally_up = torch.roll(ally_mask, shifts=1, dims=1) > EPS #up 9
+    ally_up_right = torch.roll(ally_mask, shifts=(1, -1), dims=(1, 2)) > EPS #up_right 10
+    ally_right = torch.roll(ally_mask, shifts=-1, dims=2) > EPS #right 11
+    ally_down_right = torch.roll(ally_mask, shifts=(-1, -1), dims=(1, 2)) > EPS #down_right 12
+    ally_down = torch.roll(ally_mask, shifts=-1, dims=1) > EPS # down 13
+    ally_down_left = torch.roll(ally_mask, shifts=(-1, 1), dims=(1, 2)) > EPS #down_left 14
+    ally_left = torch.roll(ally_mask, shifts=1, dims=2) > EPS #left 15
+    ally_up_left = torch.roll(ally_mask, shifts=(1, 1), dims=(1, 2)) > EPS #up_left 16
+    
+    ally_neighbors = [ally_up, ally_up_right, ally_right, ally_down_right, ally_down, ally_down_left, ally_left, ally_up_left]
+
+    for idx, n in enumerate(ally_neighbors):
+        donnation_action = idx+1
+        attack_action = idx+9
+
+        # cannot attack if the neighbors is a ally
+        direction_ally_mask  = n & ally_mask
+        b, r, c = torch.where(direction_ally_mask)
+        allowed_actions[b,r,c, attack_action] = -1
+
+        # donation if neighbors is not a ally donation is forbidden
+        b, r, c = torch.where(~n & ally_mask)
+        allowed_actions[b,r,c, donnation_action] = -1
+
+    population_mask = (simulation.grid[:, population_id] > EPS)
+    
+    return allowed_actions.argmax(-1) * population_mask
+
+def one_intelligent_agent_grid(population_id, simulation):
+
+    EPS = 1e-6
+
+    # Generate random actions (0-16) for each cell in the grid
+    action_grid = torch.zeros((simulation.batch_size, simulation.rows, simulation.cols), dtype=torch.float32, device=simulation.device)
+
+    # Small percentage are mapped to 1-8 (donations)
+    random_choice = torch.randint(1, 100, (simulation.batch_size, simulation.rows, simulation.cols), device=simulation.device).float()
+    
+    action_grid = torch.where(random_choice > 16, 0, random_choice)  # 0: do nothing
+
+    population_id_action = intelligent_agent_population(population_id, simulation)
+    population_id_mask = simulation.grid[:,population_id] > EPS
+
+    action_grid = (action_grid * ~population_id_mask) + population_id_action
+
+    population_mask = (simulation.grid > EPS).any(dim=1)
+
+    return action_grid * population_mask
+
 def random_initial_grid(simulation, populations, nb_batches, rows, cols, device):
     # Vectorized grid initialization
     with torch.no_grad():
@@ -313,14 +462,12 @@ def random_initial_grid(simulation, populations, nb_batches, rows, cols, device)
 
 def random_initial_grid_with_gaussians(simulation, populations, nb_batches, rows, cols, device):
     with torch.no_grad():
-
-        EPS = 1e-6
         
         nb_population = simulation.number_of_populations
 
         # select variance and max individual in gaussian (in fct of the grid size)
         nb_individuals = rows*cols
-        variance_gaussian = rows*cols//80
+        variance_gaussian = rows*cols/40
 
         probas = torch.tensor([populations["red"]["p"], populations["blue"]["p"], populations["green"]["p"]], device=device)
         samples_per_pop = (nb_individuals * probas).round().long()  
@@ -362,11 +509,6 @@ def random_initial_grid_with_gaussians(simulation, populations, nb_batches, rows
                             p_idx.reshape(-1),
                             positions[..., 0].reshape(-1),
                             positions[..., 1].reshape(-1)] = 1
-        
-        # delete cell in conflicts
-        collision = (simulation.grid.sum(dim=1)==1).unsqueeze(1)
-
-        simulation.grid = simulation.grid * collision
 
         means = {
             "red": populations["red"]["mean_v"],
@@ -381,7 +523,15 @@ def random_initial_grid_with_gaussians(simulation, populations, nb_batches, rows
         for pop_idx, pop in enumerate(['red', 'blue', 'green']):
             simulation.grid[:, pop_idx] *= torch.normal(mean=means[pop], std=stds[pop], size=simulation.grid[:,0].size(), device=simulation.grid.device)
 
-       
+        # Keep max fitness per pop to prevent conflicts
+        # Step 1: Find the maximum value and its index for each batch
+        _, max_indices = torch.max(simulation.grid, dim=1, keepdim=True)
+
+        # Step 2: Create a mask that is True where the max occurs
+        mask = torch.arange(simulation.grid.size(1), device=device).view(1, -1, 1, 1) == max_indices
+
+        # Step 3: Zero out everything that's not the max
+        simulation.grid *= mask.float()
 
 # Example usage:
 def main():
