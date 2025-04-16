@@ -313,7 +313,7 @@ class SquareSimulation:
         # Reshape to (N, C, obs_size, obs_size)
         patches_of_interest = patches_of_interest.view(-1, C, obs_size, obs_size)  # shape: (N, C, 5, 5)
 
-        return patches_of_interest
+        return patches_of_interest, indices  # Return patches and their indices
 
 
     def print_grid(self):
@@ -336,17 +336,22 @@ class SquareSimulation:
             print(line)
             print()
 
-def random_action_grid(nb_batch, rows, cols, device):
-    """Generates a random action grid for the simulation."""
-    # Generate random actions (0-16) for each cell in the grid
-    action_grid = torch.zeros((nb_batch, rows, cols), dtype=torch.float32, device=device)
+    def get_random_action_grid(self):
+        """Generates a random action grid for the simulation."""
+        # Generate random actions (0-16) for each cell in the grid
+        action_grid = torch.zeros((self.batch_size, self.rows, self.cols), dtype=torch.float32, device=self.device)
 
-    # Small percentage are mapped to 1-8 (donations)
-    random_choice = torch.randint(1, 100, (nb_batch, rows, cols), device=device).float()
-    
-    action_grid = torch.where(random_choice > 16, 0, random_choice)  # 0: do nothing
+        # Small percentage are mapped to 1-8 (donations)
+        random_choice = torch.randint(1, 100, (self.batch_size, self.rows, self.cols), device=self.device).float()
+        
+        action_grid = torch.where(random_choice > 16, 0, random_choice)  # 0: do nothing
+        
+        # Remove actions on empty cells
+        empty_cells = (~(self.grid > self.EPS)).all(dim=1)  # shape: (batch, rows, cols)
 
-    return action_grid
+        action_grid[empty_cells] = 0
+
+        return action_grid
 
 def random_initial_grid(simulation, populations, nb_batches, rows, cols, device):
     # Vectorized grid initialization
