@@ -2,7 +2,7 @@ import torch
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import matplotlib.colors as mcolors
-from cuda_square_simulation import SquareSimulation, random_initial_grid, random_action_grid
+from cuda_square_simulation import SquareSimulation
 
 # Set KMP_DUPLICATE_LIB_OK to avoid errors with MKL and PyTorch
 import os
@@ -83,7 +83,8 @@ def run_visual_simulation_grid(simulation, interval=500, iterations=100, populat
         plt.draw()
 
     def update(frame):
-        action_grid = random_action_grid(simulation.batch_size, simulation.rows, simulation.cols, simulation.device)
+        action_grid = simulation.one_intelligent_population_vs_random_action_grid(0)
+        #action_grid = random_action_grid(simulation.batch_size, simulation.rows, simulation.cols, simulation.device)
 
         simulation.step(action_grid)  # Run one simulation step (assumes simulation.step() updates simulation.grid)
 
@@ -136,13 +137,20 @@ if __name__ == "__main__":
     # - The simulation is already initialized via the vectorized random_initial_grid.
     
     # Example: define parameters and create the simulation.
-    nb_batches = 1
-    rows, cols = 500, 500
+    nb_batches = 10
+    rows, cols = 100, 100
     populations = {
-        "red": {"p": 0.1, "mean_v": 1.0, "std_v": 0.2},
-        "blue": {"p": 0.1, "mean_v": 1.0, "std_v": 0.2},
-        "green": {"p": 0.1, "mean_v": 1.0, "std_v": 0.2},
+        "red": {"p": 0.1, "mean_v": 2.0, "std_v": 0.1},
+        "blue": {"p": 0.1, "mean_v": 2.0, "std_v": 0.1},
+        "green": {"p": 0.1, "mean_v": 2.0, "std_v": 0.1},
     }
+
+    # TODO transform population as a tensor for arbitrary number of population
+    # populations = torch.as_tensor(
+    #     [[0.1, 2.0, 0.2],   # proba: population 1, 2 , 3...
+    #     [0.1, 2.0, 0.2],    # mean: population 1, 2, 3, ...
+    #     [0.1, 2.0, 0.2]])   # std: population 1, 2, 3, ...
+
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
     # The SquareSimulation class is assumed to have attributes:
