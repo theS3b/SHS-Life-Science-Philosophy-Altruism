@@ -268,33 +268,31 @@ class SquareSimulation:
         if batch_ids is None:
             batch_ids = torch.arange(self.batch_size, device=self.device)
 
-        nb_batches = len(batch_ids)
+        # # Generate a uniform random grid for all batches
+        # rand_vals = torch.rand((nb_batches, self.rows, self.cols), device=self.device)
 
-        # Generate a uniform random grid for all batches
-        rand_vals = torch.rand((nb_batches, self.rows, self.cols), device=self.device)
+        # # Allocate empty grid
+        # grid = torch.zeros((nb_batches, self.number_of_populations, self.rows, self.cols), dtype=torch.float32, device=self.device)
 
-        # Allocate empty grid
-        grid = torch.zeros((nb_batches, self.number_of_populations, self.rows, self.cols), dtype=torch.float32, device=self.device)
+        # probs = torch.tensor([self.populations[pop_id]["p"] for pop_id in self.pop_ids], device=self.device)
 
-        probs = torch.tensor([self.populations[pop_id]["p"] for pop_id in self.pop_ids], device=self.device)
-
-        thresholds = torch.cumsum(probs, dim=0).view(1, -1, 1, 1)  # shape: (1, x, 1, 1)
+        # thresholds = torch.cumsum(probs, dim=0).view(1, -1, 1, 1)  # shape: (1, x, 1, 1)
         
-        # Classify cells
-        for i, pop_id in enumerate(self.pop_ids):
-            if i == 0:
-                is_pop = rand_vals < thresholds[:, i, :, :]
-            else:
-                is_pop = (rand_vals >= thresholds[:, i-1, :, :]) & (rand_vals < thresholds[:, i, :, :])
+        # # Classify cells
+        # for i, pop_id in enumerate(self.pop_ids):
+        #     if i == 0:
+        #         is_pop = rand_vals < thresholds[:, i, :, :]
+        #     else:
+        #         is_pop = (rand_vals >= thresholds[:, i-1, :, :]) & (rand_vals < thresholds[:, i, :, :])
 
-            # Sample values for each population
-            mean_v = self.populations[pop_id]["mean_v"]
-            std_v = self.populations[pop_id]["std_v"]
-            pop_vals = torch.normal(mean_v, std_v, size=(nb_batches, self.rows, self.cols), device=self.device)
+        #     # Sample values for each population
+        #     mean_v = self.populations[pop_id]["mean_v"]
+        #     std_v = self.populations[pop_id]["std_v"]
+        #     pop_vals = torch.normal(mean_v, std_v, size=(nb_batches, self.rows, self.cols), device=self.device)
 
-            grid[:, self.pop_ids[pop_id]] = pop_vals * is_pop
+        #     grid[:, self.pop_ids[pop_id]] = pop_vals * is_pop
 
-        self.grid[batch_ids] = grid  # Update the grid for the specified batch ids
+        self.random_initial_grid_with_gaussians(batch_ids)  # Update the grid for the specified batch ids
 
 
     def run(self, iterations):
@@ -563,9 +561,17 @@ class SquareSimulation:
             # Ensure no negative values
             self.grid = torch.where(self.grid < 0, 0, self.grid)
 
-    def random_initial_grid_with_gaussians(self):
+    # TODO double check if batch update march batch_id
+    def random_initial_grid_with_gaussians(self, batch_ids=None):
         """Grid initialization containing one randomly centered 2d gaussian distribution of cells"""
         with torch.no_grad():
+
+            if batch_ids is None:
+                nb_batches = self.batch_size
+                batch_ids = torch.arange(self.batch_size, device=self.device)
+            else:
+                nb_batches = len(batch_ids)
+
 
             nb_population = self.number_of_populations
 
@@ -578,11 +584,11 @@ class SquareSimulation:
             samples_per_pop = (nb_individuals * probas).round().long()
 
             # Init Grid
-            self.grid = torch.zeros((self.batch_size, nb_population, self.rows, self.cols), dtype=torch.float32, device=self.device)
+            self.grid[batch_ids] = torch.zeros((nb_batches, nb_population, self.rows, self.cols), dtype=torch.float32, device=self.device)
 
             # Choose random center for gaussians
-            centers_y = torch.randint(0, self.rows, (self.batch_size, nb_population), device=self.device)
-            centers_x = torch.randint(0, self.cols, (self.batch_size, nb_population), device=self.device)
+            centers_y = torch.randint(0, self.rows, (nb_batches, nb_population), device=self.device)
+            centers_x = torch.randint(0, self.cols, (nb_batches, nb_population), device=self.device)
             centers = torch.stack([centers_y, centers_x], dim=-1)  # [B, P, 2]
 
             # Create a gaussian centered in (0,0)
@@ -594,7 +600,7 @@ class SquareSimulation:
                     continue
 
                 # Sample pop_sample random point in gaussians
-                samples = mvn.sample((self.batch_size, 1, pop_sample)) # [B, 1, pop_sample, 2]
+                samples = mvn.sample((nb_batches, 1, pop_sample)) # [B, 1, pop_sample, 2]
 
                 # Center the sample around the position
                 positions = centers[:, pop_idx].unsqueeze(1).unsqueeze(2) + samples  # (B, P, N, 2)
@@ -604,10 +610,8 @@ class SquareSimulation:
                 positions[..., 0] = positions[..., 0] %self.rows
                 positions[..., 1] = positions[..., 1] %self.cols
 
-                #b_idx = torch.arange(nb_batches, device=device).view(-1, 1, 1).expand(-1, nb_population, nb_individuals)
-
-                b_idx = torch.arange(self.batch_size, device=self.device).view(-1, 1).expand(-1, pop_sample)  # [B, N]
-                p_idx = torch.full_like(b_idx, pop_idx)  # [B, N]
+                b_idx = batch_ids.view(-1, 1).expand(-1, pop_sample)
+                p_idx = p_idx = torch.full((nb_batches, pop_sample), pop_idx, device=self.device)  # [B, N]
 
                 # Add one to the selected grid
                 self.grid[b_idx.reshape(-1),
@@ -626,17 +630,17 @@ class SquareSimulation:
                 "green": self.populations["green"]["std_v"],
             }
             for pop_idx, pop in enumerate(['red', 'blue', 'green']):
-                self.grid[:, pop_idx] *= torch.normal(mean=means[pop], std=stds[pop], size=self.grid[:, 0].size(), device=self.grid.device)
+                self.grid[batch_ids, pop_idx] *= torch.normal(mean=means[pop], std=stds[pop], size=self.grid[batch_ids, 0].size(), device=self.grid.device)
 
             # Keep max fitness per pop to prevent conflicts
             # Step 1: Find the maximum value and its index for each batch
-            _, max_indices = torch.max(self.grid, dim=1, keepdim=True)
+            _, max_indices = torch.max(self.grid[batch_ids], dim=1, keepdim=True)
 
             # Step 2: Create a mask that is True where the max occurs
-            mask = torch.arange(self.grid.size(1), device=self.device).view(1, -1, 1, 1) == max_indices
+            mask = torch.arange(self.grid[batch_ids].size(1), device=self.device).view(1, -1, 1, 1) == max_indices
 
             # Step 3: Zero out everything that's not the max
-            self.grid *= mask.float()
+            self.grid[batch_ids] *= mask.float()
 
 # Example usage:
 def main():

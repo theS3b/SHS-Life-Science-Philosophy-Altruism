@@ -138,7 +138,7 @@ if __name__ == "__main__":
     
     # Example: define parameters and create the simulation.
     nb_batches = 10
-    rows, cols = 100, 100
+    rows, cols = 10, 10
     populations = {
         "red": {"p": 0.1, "mean_v": 2.0, "std_v": 0.1},
         "blue": {"p": 0.1, "mean_v": 2.0, "std_v": 0.1},
