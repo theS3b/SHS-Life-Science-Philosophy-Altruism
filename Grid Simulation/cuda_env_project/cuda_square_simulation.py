@@ -439,10 +439,16 @@ class SquareSimulation:
         allowed_actions = torch.normal(mean=1.0, std=0.1, size=(self.batch_size, self.rows, self.cols, n_actions), dtype=torch.float32, device=self.device).clamp(0)
 
         # exemple : the line below prevent the agent to attack an other one
-        if type == 'giving':
+        if type == 'random':
+            population_mask = self.grid[:,population_id] > EPS
+            return self.get_random_action_grid() * population_mask
+        
+        
+        elif type == 'giving':
             allowed_actions[:,:,:, 9:] = -1
         elif type == 'attacking':
             allowed_actions[:,:,:, :9] = -1
+        # if the type is not defined, we return an intelligent agent that has acces to every action
 
         ally_mask = self.grid[:,population_id,...] > EPS # [batch, rows, cols]
         empty_mask = ~self.grid.any(dim=1)  # [batch, rows, cols]
@@ -508,26 +514,30 @@ class SquareSimulation:
 
         return action_grid * population_mask
     
-    def attacking_vs_giving_vs_random_action_grid(self, attacking_id, giving_id):
+    def configurable_actions_grid(self, type1='random',type2='random', type3='random',id1=0, id2=1, id3=2):
         """Generates an action grid where one population does not attack allies or donate to enemies."""
         """Every other population takes uniformly random action"""
         """The intelligent population is the one having id :population_id"""
         EPS = 1e-6
 
-        # Create an initial random action grid
+        #Create an initial random action grid
         action_grid = self.get_random_action_grid()
 
-        # Create a tensor of actions for the giving population
-        giving_id_action = self.one_intelligent_population_action_grid(giving_id, type='giving')
-        giving_id_mask = self.grid[:,giving_id] > EPS
+        # Create a tensor of actions for the fist population
+        id1_action = self.one_intelligent_population_action_grid(id1, type=type1)
+        id1_mask = self.grid[:,id1] > EPS
+        action_grid = (action_grid * ~id1_mask) + id1_action
 
-        action_grid = (action_grid * ~giving_id_mask) + giving_id_action
+       # Create a tensor of actions for the second population
+        id2_action = self.one_intelligent_population_action_grid(id2, type=type2)
+        id2_mask = self.grid[:,id2] > EPS
+        action_grid = (action_grid * ~id2_mask) + id2_action
 
-       # Create a tensor of actions for the attacking population
-        attacking_id_action = self.one_intelligent_population_action_grid(attacking_id, type='attacking')
-        attacking_id_mask = self.grid[:,attacking_id] > EPS
-
-        action_grid = (action_grid * ~attacking_id_mask) + attacking_id_action
+        # Create a tensor of actions for the third population
+        id3_action = self.one_intelligent_population_action_grid(id3, type=type3)
+        id3_mask = self.grid[:,id3] > EPS
+        action_grid = (action_grid * ~id3_mask) + id3_action
+        
 
         # mask over the populated cells
         population_mask = (self.grid > EPS).any(dim=1)

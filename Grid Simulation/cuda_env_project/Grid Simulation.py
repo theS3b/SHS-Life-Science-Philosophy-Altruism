@@ -139,13 +139,6 @@ def run_visual_simulation_grid(simulation, interval=500, iterations=100, populat
     :param population_colors: List of color names corresponding to the populations.
            If None, defaults to ['red', 'blue', 'green'].
     """
-    if population_colors is None:
-        # Default colors; ensure that the order corresponds to the channel indices in simulation.pop_ids.
-        population_colors = ['white', 'red', 'blue', 'green']
-        
-    # Create a colormap for the populations.
-    # Note: The imshow will display integer labels 0, 1, 2,... using these colors.
-    cmap = mcolors.ListedColormap(population_colors)
     
     # Set up the figure and axis.
     fig, ax = plt.subplots()
@@ -170,7 +163,7 @@ def run_visual_simulation_grid(simulation, interval=500, iterations=100, populat
         plt.draw()
 
     def update(frame):
-        action_grid = simulation.attacking_vs_giving_vs_random_action_grid(1,2)
+        action_grid = simulation.configurable_actions_grid(type1='giving', type2='attacking', type3='complete')
 
         #action_grid = random_action_grid(simulation.batch_size, simulation.rows, simulation.cols, simulation.device)
 
