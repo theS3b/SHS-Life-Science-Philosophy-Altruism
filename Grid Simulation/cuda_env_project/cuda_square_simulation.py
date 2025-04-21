@@ -423,7 +423,7 @@ class SquareSimulation:
 
         return allowed_actions.argmax(-1) * population_mask
 
-    def one_intelligent_population_action_grid(self, population_id):
+    def one_intelligent_population_action_grid(self, population_id, type=None):
         """Generates an action grid where one population does not attack allies or donate to enemies."""
         """Every other population is inactive"""
         """The intelligent population is the one having id :population_id"""
@@ -439,21 +439,16 @@ class SquareSimulation:
         allowed_actions = torch.normal(mean=1.0, std=0.1, size=(self.batch_size, self.rows, self.cols, n_actions), dtype=torch.float32, device=self.device).clamp(0)
 
         # exemple : the line below prevent the agent to attack an other one
-        #allowed_actions[:,:,:, :9] = -1
+        if type == 'giving':
+            allowed_actions[:,:,:, 9:] = -1
+        elif type == 'attacking':
+            allowed_actions[:,:,:, :9] = -1
 
         ally_mask = self.grid[:,population_id,...] > EPS # [batch, rows, cols]
+        empty_mask = ~self.grid.any(dim=1)  # [batch, rows, cols]
 
         # Every possible action id:
-            # 0: do nothing
-
-            # donnation in direction :
-            # 1: up, 2: up-right, 3: right, 4: down-right,
-            # 5: down, 6: down-left, 7: left, 8: up-left.
-
-            # attack in direction :
-            # 9: up, 10: up-right, 11: right, 12: down-right,
-            # 13: down, 14: down-left, 15: left, 16: up-left.
-
+        # 0: do nothing
         ally_up = torch.roll(ally_mask, shifts=1, dims=1) > EPS #up 9
         ally_up_right = torch.roll(ally_mask, shifts=(1, -1), dims=(1, 2)) > EPS #up_right 10
         ally_right = torch.roll(ally_mask, shifts=-1, dims=2) > EPS #right 11
@@ -463,27 +458,40 @@ class SquareSimulation:
         ally_left = torch.roll(ally_mask, shifts=1, dims=2) > EPS #left 15
         ally_up_left = torch.roll(ally_mask, shifts=(1, 1), dims=(1, 2)) > EPS #up_left 16
 
-        ally_neighbors = [ally_up, ally_up_right, ally_right, ally_down_right, ally_down, ally_down_left, ally_left, ally_up_left]
+        empty_up = torch.roll(empty_mask, shifts=1, dims=1) > EPS #up 9
+        empty_up_right = torch.roll(empty_mask, shifts=(1, -1), dims=(1, 2)) > EPS #up_right 10
+        empty_right = torch.roll(empty_mask, shifts=-1, dims=2) > EPS #right 11
+        empty_down_right = torch.roll(empty_mask, shifts=(-1, -1), dims=(1, 2)) > EPS #down_right 12
+        empty_down = torch.roll(empty_mask, shifts=-1, dims=1) > EPS # down 13
+        empty_down_left = torch.roll(empty_mask, shifts=(-1, 1), dims=(1, 2)) > EPS #down_left 14
+        empty_left = torch.roll(empty_mask, shifts=1, dims=2) > EPS #left 15
+        empty_up_left = torch.roll(empty_mask, shifts=(1, 1), dims=(1, 2)) > EPS #up_left 16
+        
+        
+        neighbors = [(ally_up, empty_up), (ally_up_right, empty_up_right), (ally_right, empty_right), (ally_down_right, empty_down_right),
+                    (ally_down, empty_down), (ally_down_left, empty_down_left), (ally_left, empty_left), (ally_up_left, empty_up_left)]
 
-        for idx, n in enumerate(ally_neighbors):
-            donnation_action = idx+1
-            attack_action = idx+9
+        for idx, n in enumerate(neighbors):
+                
+                ally_n, empty_n = n
+                donnation_action = idx+1
+                attack_action = idx+9
 
-            # cannot attack if the neighbors is a ally
-            direction_ally_mask  = n & ally_mask
-            b, r, c = torch.where(direction_ally_mask)
-            allowed_actions[b,r,c, attack_action] = -1
+                # cannot attack if the neighbors is a ally
+                direction_ally_mask  = ally_n & ally_mask | empty_n & ally_mask
+                b, r, c = torch.where(direction_ally_mask)
+                allowed_actions[b,r,c, attack_action] = -1
 
-            # donation if neighbors is not a ally donation is forbidden
-            b, r, c = torch.where(~n & ally_mask)
-            allowed_actions[b,r,c, donnation_action] = -1
+                # donation if neighbors is not a ally donation is forbidden
+                b, r, c = torch.where(~ally_n & ally_mask)
+                allowed_actions[b,r,c, donnation_action] = -1
 
         # Create a mask to cancel other populatin actions
         population_mask = (self.grid[:, population_id] > EPS)
 
         return allowed_actions.argmax(-1) * population_mask
 
-    def one_intelligent_population_vs_random_action_grid(self, population_id):
+    def one_intelligent_population_vs_random_action_grid(self, population_id, type=None):
         """Generates an action grid where one population does not attack allies or donate to enemies."""
         """Every other population takes uniformly random action"""
         """The intelligent population is the one having id :population_id"""
@@ -491,7 +499,7 @@ class SquareSimulation:
 
         action_grid = self.get_random_action_grid()
 
-        population_id_action = self.one_intelligent_population_action_grid(population_id)
+        population_id_action = self.one_intelligent_population_action_grid(population_id, type=type)
         population_id_mask = self.grid[:,population_id] > EPS
 
         action_grid = (action_grid * ~population_id_mask) + population_id_action
@@ -499,6 +507,33 @@ class SquareSimulation:
         population_mask = (self.grid > EPS).any(dim=1)
 
         return action_grid * population_mask
+    
+    def attacking_vs_giving_vs_random_action_grid(self, attacking_id, giving_id):
+        """Generates an action grid where one population does not attack allies or donate to enemies."""
+        """Every other population takes uniformly random action"""
+        """The intelligent population is the one having id :population_id"""
+        EPS = 1e-6
+
+        # Create an initial random action grid
+        action_grid = self.get_random_action_grid()
+
+        # Create a tensor of actions for the giving population
+        giving_id_action = self.one_intelligent_population_action_grid(giving_id, type='giving')
+        giving_id_mask = self.grid[:,giving_id] > EPS
+
+        action_grid = (action_grid * ~giving_id_mask) + giving_id_action
+
+       # Create a tensor of actions for the attacking population
+        attacking_id_action = self.one_intelligent_population_action_grid(attacking_id, type='attacking')
+        attacking_id_mask = self.grid[:,attacking_id] > EPS
+
+        action_grid = (action_grid * ~attacking_id_mask) + attacking_id_action
+
+        # mask over the populated cells
+        population_mask = (self.grid > EPS).any(dim=1)
+
+        return action_grid * population_mask
+
 
     def random_initial_grid(self, populations, nb_batches, rows, cols, device):
         """Vectorized uniformly random grid initialization"""
@@ -577,7 +612,7 @@ class SquareSimulation:
 
             # select variance and max individual in gaussian (in fct of the grid size)
             nb_individuals = self.rows*self.cols
-            variance_gaussian = self.rows*self.cols/60
+            variance_gaussian =self.rows*self.cols/60
 
             probas = torch.tensor([self.populations["red"]["p"], self.populations["blue"]["p"], self.populations["green"]["p"]], device=self.device)
 
@@ -611,7 +646,7 @@ class SquareSimulation:
                 positions[..., 1] = positions[..., 1] %self.cols
 
                 b_idx = batch_ids.view(-1, 1).expand(-1, pop_sample)
-                p_idx = p_idx = torch.full((nb_batches, pop_sample), pop_idx, device=self.device)  # [B, N]
+                p_idx = torch.full((nb_batches, pop_sample), pop_idx, device=self.device)  # [B, N]
 
                 # Add one to the selected grid
                 self.grid[b_idx.reshape(-1),
