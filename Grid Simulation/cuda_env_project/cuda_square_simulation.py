@@ -4,6 +4,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import time
+from torch.distributions.multivariate_normal import MultivariateNormal
 
 # Dummy profile decorator for when not using kernprof
 try:
@@ -261,39 +262,219 @@ class SquareSimulation:
 
         return rewards, done_batch, info
 
+    # def compute_rewards(self, past_grid):
+    #     diff = self.grid - past_grid                         # (B, P, R, C)
+    #     rewards = diff.mean(dim=(2, 3))                      # (B, P)
+
+    #     # done & killed per batch, per pop
+    #     done_per_pop   = (self.grid > SquareSimulation.EPS).sum((2, 3)) \
+    #                     / (self.rows * self.cols) > self.done_population
+    #     killed_per_pop = ~(past_grid > SquareSimulation.EPS).any((2, 3))
+
+    #     # take the clever population only
+    #     rewards      = rewards[:, self.clever_pop_id]        # (B,)
+    #     done_batch   = done_per_pop[:,   self.clever_pop_id] # (B,)
+    #     killed_batch = killed_per_pop[:, self.clever_pop_id] # (B,)
+
+    #     rewards[killed_batch] -= self.REWARD_FOR_DONE
+
+    #     info = {}  # add whatever you need for logging
+
+    #     return rewards, done_batch, info
+
     
-    def reset(self, batch_ids = None):
+    def reset(self, batch_ids = None, type='gaussian'):
         """Reset the grid for the specified batch ids."""
         if batch_ids is None:
             batch_ids = torch.arange(self.batch_size, device=self.device)
 
-        nb_batches = len(batch_ids)
+        if type == 'uniform':
+            nb_batches = len(batch_ids)
 
-        # Generate a uniform random grid for all batches
-        rand_vals = torch.rand((nb_batches, self.rows, self.cols), device=self.device)
+            # Generate a uniform random grid for all batches
+            rand_vals = torch.rand((nb_batches, self.rows, self.cols), device=self.device)
 
-        # Allocate empty grid
-        grid = torch.zeros((nb_batches, self.number_of_populations, self.rows, self.cols), dtype=torch.float32, device=self.device)
+            # Allocate empty grid
+            grid = torch.zeros((nb_batches, self.number_of_populations, self.rows, self.cols), dtype=torch.float32, device=self.device)
 
-        probs = torch.tensor([self.populations[pop_id]["p"] for pop_id in self.pop_ids], device=self.device)
+            probs = torch.tensor([self.populations[pop_id]["p"] for pop_id in self.pop_ids], device=self.device)
 
-        thresholds = torch.cumsum(probs, dim=0).view(1, -1, 1, 1)  # shape: (1, x, 1, 1)
+            thresholds = torch.cumsum(probs, dim=0).view(1, -1, 1, 1)  # shape: (1, x, 1, 1)
+            
+            # Classify cells
+            for i, pop_id in enumerate(self.pop_ids):
+                if i == 0:
+                    is_pop = rand_vals < thresholds[:, i, :, :]
+                else:
+                    is_pop = (rand_vals >= thresholds[:, i-1, :, :]) & (rand_vals < thresholds[:, i, :, :])
+
+                # Sample values for each population
+                mean_v = self.populations[pop_id]["mean_v"]
+                std_v = self.populations[pop_id]["std_v"]
+                pop_vals = torch.normal(mean_v, std_v, size=(nb_batches, self.rows, self.cols), device=self.device)
+
+                grid[:, self.pop_ids[pop_id]] = pop_vals * is_pop
+
+            self.grid[batch_ids] = grid  # Update the grid for the specified batch ids
+            
+        elif type == 'gaussian':
+            self.random_initial_grid_with_gaussians(batch_ids)
+        else:
+            raise ValueError(f"Unknown reset type: {type}")
         
-        # Classify cells
-        for i, pop_id in enumerate(self.pop_ids):
-            if i == 0:
-                is_pop = rand_vals < thresholds[:, i, :, :]
+    def random_initial_grid_with_gaussians(self, batch_ids=None, variance_gaussian_coef=60):
+        """Grid initialization containing one randomly centered 2d gaussian distribution of cells"""
+        with torch.no_grad():
+
+            if batch_ids is None:
+                nb_batches = self.batch_size
+                batch_ids = torch.arange(self.batch_size, device=self.device)
             else:
-                is_pop = (rand_vals >= thresholds[:, i-1, :, :]) & (rand_vals < thresholds[:, i, :, :])
+                nb_batches = len(batch_ids)
 
-            # Sample values for each population
-            mean_v = self.populations[pop_id]["mean_v"]
-            std_v = self.populations[pop_id]["std_v"]
-            pop_vals = torch.normal(mean_v, std_v, size=(nb_batches, self.rows, self.cols), device=self.device)
 
-            grid[:, self.pop_ids[pop_id]] = pop_vals * is_pop
+            nb_population = self.number_of_populations
 
-        self.grid[batch_ids] = grid  # Update the grid for the specified batch ids
+            # select variance and max individual in gaussian (in fct of the grid size)
+            nb_individuals = self.rows*self.cols
+            variance_gaussian = self.rows*self.cols/variance_gaussian_coef
+
+            probas = torch.tensor([self.populations["red"]["p"], self.populations["blue"]["p"], self.populations["green"]["p"]], device=self.device)
+
+            samples_per_pop = (nb_individuals * probas).round().long()
+
+            # Init Grid
+            self.grid[batch_ids] = torch.zeros((nb_batches, nb_population, self.rows, self.cols), dtype=torch.float32, device=self.device)
+
+            # Choose random center for gaussians
+            centers_y = torch.randint(0, self.rows, (nb_batches, nb_population), device=self.device)
+            centers_x = torch.randint(0, self.cols, (nb_batches, nb_population), device=self.device)
+            centers = torch.stack([centers_y, centers_x], dim=-1)  # [B, P, 2]
+
+            # Create a gaussian centered in (0,0)
+            cov = torch.eye(2, device=self.device) * variance_gaussian #TODO check if we want to add covariance
+            mvn = MultivariateNormal(loc=torch.zeros(2, device=self.device), covariance_matrix=cov)
+
+            for pop_idx, pop_sample in enumerate(samples_per_pop):
+                if pop_sample==0:
+                    continue
+
+                # Sample pop_sample random point in gaussians
+                samples = mvn.sample((nb_batches, 1, pop_sample)) # [B, 1, pop_sample, 2]
+
+                # Center the sample around the position
+                positions = centers[:, pop_idx].unsqueeze(1).unsqueeze(2) + samples  # (B, P, N, 2)
+                positions = positions.round().long()
+
+                # modulo the coordinate for periodic bound
+                positions[..., 0] = positions[..., 0] %self.rows
+                positions[..., 1] = positions[..., 1] %self.cols
+
+                b_idx = batch_ids.view(-1, 1).expand(-1, pop_sample)
+                p_idx = p_idx = torch.full((nb_batches, pop_sample), pop_idx, device=self.device)  # [B, N]
+
+                # Add one to the selected grid
+                self.grid[b_idx.reshape(-1),
+                                p_idx.reshape(-1),
+                                positions[..., 0].reshape(-1),
+                                positions[..., 1].reshape(-1)] = 1
+
+            means = {
+                "red": self.populations["red"]["mean_v"],
+                "blue": self.populations["blue"]["mean_v"],
+                "green": self.populations["green"]["mean_v"],
+            }
+            stds = {
+                "red": self.populations["red"]["std_v"],
+                "blue": self.populations["blue"]["std_v"],
+                "green": self.populations["green"]["std_v"],
+            }
+            
+            for pop_idx, pop in enumerate(['red', 'blue', 'green']):
+                self.grid[batch_ids, pop_idx] *= torch.normal(mean=means[pop], std=stds[pop], size=self.grid[batch_ids, 0].size(), device=self.grid.device)
+
+            # Keep max fitness per pop to prevent conflicts
+            # Step 1: Find the maximum value and its index for each batch
+            _, max_indices = torch.max(self.grid[batch_ids], dim=1, keepdim=True)
+
+            # Step 2: Create a mask that is True where the max occurs
+            mask = torch.arange(self.grid[batch_ids].size(1), device=self.device).view(1, -1, 1, 1) == max_indices
+
+            # Step 3: Zero out everything that's not the max
+            self.grid[batch_ids] *= mask.float()
+            
+    def one_intelligent_population_action_grid(self, population_id, type='giving'):
+        """Generates an action grid where one population does not attack allies or donate to enemies."""
+        """Every other population is inactive"""
+        """The intelligent population is the one having id :population_id"""
+
+        EPS = 1e-6
+
+        # Create a tensor of every possible action
+        n_actions = 17
+
+        # Generate gaussian tensor, the idea is that argmax will be random, we can now manipulate the tab to prevent agent to do unproductive actions.
+
+        # [nb_batch, rows, cols, n_actions]
+        allowed_actions = torch.normal(mean=1.0, std=0.1, size=(self.batch_size, self.rows, self.cols, n_actions), dtype=torch.float32, device=self.device).clamp(0)
+
+        # exemple : the line below prevent the agent to attack an other one
+        if type == 'giving':
+            allowed_actions[:,:,:, 10:] = -1
+        elif type == 'attacking':
+            allowed_actions[:,:,:, :9] = -1
+        
+        #allowed_actions[:,:,:, :9] = -1
+
+        ally_mask = self.grid[:,population_id,...] > EPS # [batch, rows, cols]
+
+        # Every possible action id:
+            # 0: do nothing
+        ally_up = torch.roll(ally_mask, shifts=1, dims=1) > EPS #up 9
+        ally_up_right = torch.roll(ally_mask, shifts=(1, -1), dims=(1, 2)) > EPS #up_right 10
+        ally_right = torch.roll(ally_mask, shifts=-1, dims=2) > EPS #right 11
+        ally_down_right = torch.roll(ally_mask, shifts=(-1, -1), dims=(1, 2)) > EPS #down_right 12
+        ally_down = torch.roll(ally_mask, shifts=-1, dims=1) > EPS # down 13
+        ally_down_left = torch.roll(ally_mask, shifts=(-1, 1), dims=(1, 2)) > EPS #down_left 14
+        ally_left = torch.roll(ally_mask, shifts=1, dims=2) > EPS #left 15
+        ally_up_left = torch.roll(ally_mask, shifts=(1, 1), dims=(1, 2)) > EPS #up_left 16
+
+        ally_neighbors = [ally_up, ally_up_right, ally_right, ally_down_right, ally_down, ally_down_left, ally_left, ally_up_left]
+
+        for idx, n in enumerate(ally_neighbors):
+            donnation_action = idx+1
+            attack_action = idx+9
+
+            # cannot attack if the neighbors is a ally
+            direction_ally_mask  = n & ally_mask
+            b, r, c = torch.where(direction_ally_mask)
+            allowed_actions[b,r,c, attack_action] = -1
+
+            # donation if neighbors is not a ally donation is forbidden
+            b, r, c = torch.where(~n & ally_mask)
+            allowed_actions[b,r,c, donnation_action] = -1
+
+        # Create a mask to cancel other populatin actions
+        population_mask = (self.grid[:, population_id] > EPS)
+
+        return allowed_actions.argmax(-1) * population_mask
+
+    def one_intelligent_population_vs_random_action_grid(self, population_id):
+        """Generates an action grid where one population does not attack allies or donate to enemies."""
+        """Every other population takes uniformly random action"""
+        """The intelligent population is the one having id :population_id"""
+        EPS = 1e-6
+
+        action_grid = self.get_random_action_grid()
+
+        population_id_action = self.one_intelligent_population_action_grid(population_id)
+        population_id_mask = self.grid[:,population_id] > EPS
+
+        action_grid = (action_grid * ~population_id_mask) + population_id_action
+
+        population_mask = (self.grid > EPS).any(dim=1)
+
+        return action_grid * population_mask
 
 
     def run(self, iterations):
