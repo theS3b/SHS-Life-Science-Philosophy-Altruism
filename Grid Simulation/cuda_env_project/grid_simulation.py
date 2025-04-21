@@ -2,7 +2,7 @@ import torch
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import matplotlib.colors as mcolors
-from cuda_square_simulation import SquareSimulation, random_initial_grid, random_action_grid
+from cuda_square_simulation import SquareSimulation, random_initial_grid
 
 # Set KMP_DUPLICATE_LIB_OK to avoid errors with MKL and PyTorch
 import os
@@ -83,7 +83,7 @@ def run_visual_simulation_grid(simulation, interval=500, iterations=100, populat
         plt.draw()
 
     def update(frame):
-        action_grid = random_action_grid(simulation.batch_size, simulation.rows, simulation.cols, simulation.device)
+        action_grid = simulation.get_random_initial_grid(simulation.batch_size, simulation.rows, simulation.cols, simulation.device)
 
         simulation.step(action_grid)  # Run one simulation step (assumes simulation.step() updates simulation.grid)
 

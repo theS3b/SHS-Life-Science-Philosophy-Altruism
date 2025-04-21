@@ -18,7 +18,7 @@ class SquareSimulation:
     COLONIZE_PROB_ONE = 2 # 2 fitness for prob 100% of colonization
     REWARD_FOR_DONE = 1.0  # Reward for reaching the done condition
 
-    def __init__(self, nb_batch, rows, cols, populations, device, observation_size=5, done_population=0.9, initial_grid=None):
+    def __init__(self, nb_batch, rows, cols, populations, device, clever_pop_id = 0, observation_size=5, done_population=0.9, initial_grid=None):
         """
         :param rows: number of rows in the grid.
         :param cols: number of columns in the grid.
@@ -48,6 +48,8 @@ class SquareSimulation:
         self.CIRC_KERNEL = torch.tensor([[1, 1, 1], [1, 0, 1], [1, 1, 1]], dtype=self.grid.dtype, device=self.device).view(1, 1, 3, 3)
         self.observation_size = observation_size
         self.done_population = done_population  # Population density threshold for done condition
+        
+        self.clever_pop_id = clever_pop_id  # Clever population id
 
     
     def colonization_phase(self):
@@ -231,12 +233,16 @@ class SquareSimulation:
         """
 
         rewards = self.grid - past_grid
-        rewards = rewards.sum(dim=(0, 2, 3))
-        rewards = rewards / (self.rows * self.cols)  # Normalize by the number of cells
+        rewards = rewards.mean(dim=(0, 2, 3))
 
         # Define done if one population populates x% of the grid
         done_batch_per_pop = torch.sum(self.grid > SquareSimulation.EPS, dim=(2, 3)) / (self.rows * self.cols) > self.done_population
         done_batch = done_batch_per_pop.any(dim=1)  # Check if any population has reached the threshold in each batch
+        
+        killed_batch_per_pop = ~torch.any(past_grid > SquareSimulation.EPS, dim=(2, 3))
+        total_killed_per_pop = torch.sum(killed_batch_per_pop, dim=0) / (self.batch_size * self.rows * self.cols)
+        
+        rewards -= total_killed_per_pop * self.REWARD_FOR_DONE  # Penalize for killed populations
 
         # TODO We could add bigger reward for the population that reached the threshold
         # rewards += done_batch_per_pop.sum(dim=0) * self.REWARD_FOR_DONE
@@ -247,6 +253,11 @@ class SquareSimulation:
 
         # Reset done batches only
         self.reset(done_batch.nonzero(as_tuple=True)[0])
+        
+        # Reset when the clever population is dead
+        if killed_batch_per_pop[:, self.clever_pop_id].any():
+            # Reset only these ones
+            self.reset(killed_batch_per_pop[:, self.clever_pop_id].nonzero(as_tuple=True)[0])
 
         return rewards, done_batch, info
 
