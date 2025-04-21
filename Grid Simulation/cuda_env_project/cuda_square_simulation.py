@@ -352,7 +352,7 @@ class SquareSimulation:
         action_grid = torch.zeros((self.batch_size, self.rows, self.cols), dtype=torch.float32, device=self.device)
 
         # Small percentage are mapped to 1-8 (donations)
-        random_choice = torch.randint(1, 100, (self.batch_size, self.rows, self.cols), device=self.device).float()
+        random_choice = torch.randint(1, 16, (self.batch_size, self.rows, self.cols), device=self.device).float()
         
         action_grid = torch.where(random_choice > 16, 0, random_choice)  # 0: do nothing
         

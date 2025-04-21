@@ -90,7 +90,7 @@ def get_rgb_map(simulation, ax, action_grid = None):
     rgb_map = np.zeros((rows, cols, 3))
 
     # Get the maximum fitness
-    max_fitness = grid0.max() # /!\ the max fitness is redefined at each step
+    max_fitness = 2#grid0.max() # /!\ the max fitness is redefined at each step
     
     # Normalize the fitness values to the range [0.2, 1] to define the color intensity
     norm_fitness = np.clip(grid0/max_fitness, 0.2, 1).max(axis=0)
@@ -229,9 +229,9 @@ if __name__ == "__main__":
     nb_batches = 1
     rows, cols = 20, 20
     populations = {
-        "red": {"p": 0.05, "mean_v": 1.0, "std_v": 0.1},
-        "blue": {"p": 0.05, "mean_v": 1.0, "std_v": 0.1},
-        "green": {"p": 0.05, "mean_v": 1.0, "std_v": 0.1},
+        "red": {"p": 0.2, "mean_v": 1.0, "std_v": 0.1},
+        "blue": {"p": 0.2, "mean_v": 1.0, "std_v": 0.1},
+        "green": {"p": 0.2, "mean_v": 1.0, "std_v": 0.1},
     }
 
     # TODO transform population as a tensor for arbitrary number of population
