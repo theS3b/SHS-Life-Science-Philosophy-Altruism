@@ -1,0 +1,14 @@
+/home/delsad/SHS-Life-Science-Philosophy-Altruism/Grid Simulation/cuda_env_project/grid_simulation.py:67: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`). Consider using `matplotlib.pyplot.close()`.
+  fig, ax = plt.subplots()
+Using device: cuda:0
+Training the policy network...
+  0%|          | 0/2 [00:00<?, ?it/s]
+  0%|          | 0/750 [00:00<?, ?it/s]
+Episode 0 - Time 749 - Avg reward: -12.2538 - Loss: -8.09 - Action counts: [4.99168932 5.24054369 6.2536699  6.88186408 5.98897087 5.80629126
+ 5.11005825 7.11394175 5.60994175 5.81126214 6.21266019 5.53040777
+ 5.91658252 6.00357282 6.4152233  5.60434951 5.50897087]
+  0%|          | 0/750 [00:00<?, ?it/s]
+Episode 1 - Time 749 - Avg reward: -8.9662 - Loss: 3028.33 - Action counts: [ 0.64969551  1.00672486  1.86338279  3.89029557  3.00363791  4.26441558
+  1.05738212 80.36816711  2.08831621  0.23757687  0.25805985  0.2067044
+  0.22416692  0.24297272  0.23506487  0.20299332  0.20044339]
+Test reward: -0.2751

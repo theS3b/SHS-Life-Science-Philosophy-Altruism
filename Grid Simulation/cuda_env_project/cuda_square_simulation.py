@@ -210,7 +210,7 @@ class SquareSimulation:
 
 
     @profile
-    def step(self, action_grid=None):
+    def step(self, action_grid=None, oberservation_indices=None):
         """One full simulation iteration: colonization then conflict."""
         past_grid = self.grid.clone()
 
@@ -220,11 +220,11 @@ class SquareSimulation:
             self.conflict_phase(action_grid)
 
         # Compute rewards
-        rewards, done_batch, info = self.compute_rewards(past_grid)
+        rewards, done_batch, info = self.compute_rewards(past_grid, oberservation_indices)
 
         return rewards, done_batch, info
 
-    def compute_rewards(self, past_grid):
+    #def compute_rewards(self, past_grid):
         """Compute rewards based on the change in fitness values.
         
         returns:
@@ -262,25 +262,47 @@ class SquareSimulation:
 
         return rewards, done_batch, info
 
-    # def compute_rewards(self, past_grid):
-    #     diff = self.grid - past_grid                         # (B, P, R, C)
-    #     rewards = diff.mean(dim=(2, 3))                      # (B, P)
+    def compute_rewards(self, past_grid, oberservation_indices=None, type="per_agent"):
+        diff = self.grid - past_grid                         # (B, P, R, C)
+        
+        if oberservation_indices is not None:
+            batch_idx, x_idx, y_idx = oberservation_indices.T
+            
+            if type == "per_agent":
+                rewards = diff[batch_idx, self.clever_pop_id, x_idx, y_idx]
+                
+            elif type == "per_population":
+                rewards_per_batch = diff[:, self.clever_pop_id, ...].mean(dim=(1, 2))  # (B, )
+                
+                # Same reward for agents in the same batch
+                rewards = rewards_per_batch[batch_idx]
+            else:
+                raise ValueError(f"Unknown type: {type}")
+            
+        else:
+            rewards = diff[:, self.clever_pop_id, ...].mean()
+            
 
-    #     # done & killed per batch, per pop
-    #     done_per_pop   = (self.grid > SquareSimulation.EPS).sum((2, 3)) \
-    #                     / (self.rows * self.cols) > self.done_population
-    #     killed_per_pop = ~(past_grid > SquareSimulation.EPS).any((2, 3))
+        # done & killed per batch, per pop
+        done_per_pop   = (self.grid > SquareSimulation.EPS).sum((2, 3)) \
+                        / (self.rows * self.cols) > self.done_population
+        killed_per_pop = ~(past_grid > SquareSimulation.EPS).any((2, 3))
 
-    #     # take the clever population only
-    #     rewards      = rewards[:, self.clever_pop_id]        # (B,)
-    #     done_batch   = done_per_pop[:,   self.clever_pop_id] # (B,)
-    #     killed_batch = killed_per_pop[:, self.clever_pop_id] # (B,)
+        # take the clever population only
+        done_batch   = done_per_pop[:,   self.clever_pop_id] # (B,)
+        killed_batch = killed_per_pop[:, self.clever_pop_id] # (B,)
+        
 
-    #     rewards[killed_batch] -= self.REWARD_FOR_DONE
+        if oberservation_indices is not None:
+            batch_idx, x_idx, y_idx = oberservation_indices.T
+            
+            # Penalize all with batch idx corresponding to a killed batch
+            killed_obs = killed_batch[batch_idx]
+            rewards[killed_obs] -= self.REWARD_FOR_DONE
 
-    #     info = {}  # add whatever you need for logging
+        info = {}  # add whatever you need for logging
 
-    #     return rewards, done_batch, info
+        return rewards, done_batch, info
 
     
     def reset(self, batch_ids = None, type='gaussian'):

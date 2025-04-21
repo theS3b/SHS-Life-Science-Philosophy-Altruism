@@ -1,0 +1,5 @@
+/var/spool/slurmd/job2605504/slurm_script: line 10: cd: too many arguments
+  File "/home/delsad/SHS-Life-Science-Philosophy-Altruism/Grid Simulation/cuda_env_project/run_agent_train.py", line 14
+    %reload_ext autoreload
+    ^
+SyntaxError: invalid syntax

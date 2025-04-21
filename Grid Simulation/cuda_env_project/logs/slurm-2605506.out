@@ -1,0 +1,2 @@
+/var/spool/slurmd/job2605506/slurm_script: line 10: cd: too many arguments
+slurmstepd: error: *** JOB 2605506 ON i18 CANCELLED AT 2025-04-21T13:28:38 ***

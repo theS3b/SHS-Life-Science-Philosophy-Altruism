@@ -1,0 +1,11 @@
+#!/bin/bash
+#SBATCH --nodes 1
+#SBATCH --ntasks 1
+#SBATCH --cpus-per-task 10
+#SBATCH --mem 32G
+#SBATCH --gres=gpu:1
+#SBATCH --time 12:00:00                                     # maximum time limit is 12h. We need to rerun the jobs every 12 hours.
+#SBATCH --output=./logs/slurm-%j.out
+
+cd $HOME/SHS-Life-Science-Philosophy-Altruism/Grid\ Simulation/cuda_env_project/                    # change this to where your repo is located
+pixi run python run_agent_train.py
