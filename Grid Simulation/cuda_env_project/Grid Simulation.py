@@ -174,13 +174,13 @@ def run_visual_simulation_grid(simulation, interval=500, iterations=100, populat
 
         #action_grid = random_action_grid(simulation.batch_size, simulation.rows, simulation.cols, simulation.device)
 
-        simulation.step(action_grid)  # Run one simulation step (assumes simulation.step() updates simulation.grid)
-
         # nb_empty_cells = (simulation.grid[0].sum(dim=0) < 1e-6).sum().item()
 
         nonlocal current_iteration
         current_iteration += 1
         update_grid(action_grid)
+        simulation.step(action_grid)  # Run one simulation step (assumes simulation.step() updates simulation.grid)
+
 
     def run_simulation(event):
         nonlocal running, current_iteration
