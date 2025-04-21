@@ -363,66 +363,6 @@ class SquareSimulation:
 
         return action_grid
 
-    def inteligent_agent_action_grid(self):
-        """Generates an action grid where each population does not attack allies or donate to enemies."""
-
-        EPS = 1e-6
-
-        # Create a tensor of every possible action
-        n_actions = 17
-
-        # Generate gaussian tensor, the idea is that argmax will be random, we can now manipulate the tab to prevent agent to do unproductive actions.
-
-        # [nb_batch, rows, cols, n_actions]
-        allowed_actions = torch.normal(mean=1.0, std=0.1, size=(self.batch_size, self.rows, self.cols, n_actions), dtype=torch.float32, device=self.device).clamp(0)
-
-        # exemple : the line below prevent the agent to attack an other one
-        #allowed_actions[:,:,:, 9:] = -1
-
-        for pop_id in range(self.number_of_populations):
-
-            # Every possible action id:
-                # 0: do nothing
-
-                # donnation in direction :
-                # 1: up, 2: up-right, 3: right, 4: down-right,
-                # 5: down, 6: down-left, 7: left, 8: up-left.
-
-                # attack in direction :
-                # 9: up, 10: up-right, 11: right, 12: down-right,
-                # 13: down, 14: down-left, 15: left, 16: up-left.
-
-            ally_mask = self.grid[:,pop_id,...] > EPS # [batch, rows, cols]
-
-            ally_up = torch.roll(ally_mask, shifts=1, dims=1) > EPS #up 9
-            ally_up_right = torch.roll(ally_mask, shifts=(1, -1), dims=(1, 2)) > EPS #up_right 10
-            ally_right = torch.roll(ally_mask, shifts=-1, dims=2) > EPS #right 11
-            ally_down_right = torch.roll(ally_mask, shifts=(-1, -1), dims=(1, 2)) > EPS #down_right 12
-            ally_down = torch.roll(ally_mask, shifts=-1, dims=1) > EPS # down 13
-            ally_down_left = torch.roll(ally_mask, shifts=(-1, 1), dims=(1, 2)) > EPS #down_left 14
-            ally_left = torch.roll(ally_mask, shifts=1, dims=2) > EPS #left 15
-            ally_up_left = torch.roll(ally_mask, shifts=(1, 1), dims=(1, 2)) > EPS #up_left 16
-
-            ally_neighbors = [ally_up, ally_up_right, ally_right, ally_down_right, ally_down, ally_down_left, ally_left, ally_up_left]
-
-            for idx, n in enumerate(ally_neighbors):
-                donnation_action = idx+1
-                attack_action = idx+9
-
-                # cannot attack if the neighbors is a ally
-                direction_ally_mask  = n & ally_mask
-                b, r, c = torch.where(direction_ally_mask)
-                allowed_actions[b,r,c, attack_action] = -1
-
-                # donation if neighbors is not a ally donation is forbidden
-                b, r, c = torch.where(~n & ally_mask)
-                allowed_actions[b,r,c, donnation_action] = -1
-
-        # Create a mask to erase action for unpopulated cells
-        population_mask = (self.grid > EPS).any(dim=1)
-
-        return allowed_actions.argmax(-1) * population_mask
-
     def one_intelligent_population_action_grid(self, population_id, type=None):
         """Generates an action grid where one population does not attack allies or donate to enemies."""
         """Every other population is inactive"""
@@ -438,17 +378,21 @@ class SquareSimulation:
         # [nb_batch, rows, cols, n_actions]
         allowed_actions = torch.normal(mean=1.0, std=0.1, size=(self.batch_size, self.rows, self.cols, n_actions), dtype=torch.float32, device=self.device).clamp(0)
 
-        # exemple : the line below prevent the agent to attack an other one
+        # Define the semi-random agents type
+        # This agent is completely random
         if type == 'random':
             population_mask = self.grid[:,population_id] > EPS
             return self.get_random_action_grid() * population_mask
         
-        
+        # This agent that only gives fitness to its allies
         elif type == 'giving':
             allowed_actions[:,:,:, 9:] = -1
+
+        # This agent that only attacks its enemies
         elif type == 'attacking':
             allowed_actions[:,:,:, :9] = -1
-        # if the type is not defined, we return an intelligent agent that has acces to every action
+
+        # if the type is not defined above, we return an intelligent agent that has acces to every action
 
         ally_mask = self.grid[:,population_id,...] > EPS # [batch, rows, cols]
         empty_mask = ~self.grid.any(dim=1)  # [batch, rows, cols]
@@ -496,28 +440,11 @@ class SquareSimulation:
         population_mask = (self.grid[:, population_id] > EPS)
 
         return allowed_actions.argmax(-1) * population_mask
-
-    def one_intelligent_population_vs_random_action_grid(self, population_id, type=None):
-        """Generates an action grid where one population does not attack allies or donate to enemies."""
-        """Every other population takes uniformly random action"""
-        """The intelligent population is the one having id :population_id"""
-        EPS = 1e-6
-
-        action_grid = self.get_random_action_grid()
-
-        population_id_action = self.one_intelligent_population_action_grid(population_id, type=type)
-        population_id_mask = self.grid[:,population_id] > EPS
-
-        action_grid = (action_grid * ~population_id_mask) + population_id_action
-
-        population_mask = (self.grid > EPS).any(dim=1)
-
-        return action_grid * population_mask
     
     def configurable_actions_grid(self, type1='random',type2='random', type3='random',id1=0, id2=1, id3=2):
-        """Generates an action grid where one population does not attack allies or donate to enemies."""
-        """Every other population takes uniformly random action"""
-        """The intelligent population is the one having id :population_id"""
+        """This function allows to create a grid with 3 intelligent agents"""
+        """By default, the action grid is random."""
+        """The differents agents types are : giving, attacking, random, or an intelligent agent with every move allowed"""
         EPS = 1e-6
 
         #Create an initial random action grid
@@ -606,7 +533,6 @@ class SquareSimulation:
             # Ensure no negative values
             self.grid = torch.where(self.grid < 0, 0, self.grid)
 
-    # TODO double check if batch update march batch_id
     def random_initial_grid_with_gaussians(self, batch_ids=None):
         """Grid initialization containing one randomly centered 2d gaussian distribution of cells"""
         with torch.no_grad():
