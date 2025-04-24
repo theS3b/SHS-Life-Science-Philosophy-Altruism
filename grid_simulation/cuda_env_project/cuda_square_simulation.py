@@ -22,7 +22,7 @@ class SquareSimulation:
     REWARD_FOR_DONE = 1.0  # Reward for reaching the done condition
     FITNESS_GROWTH_VALUE = 0.01 # number of fitness points gained at every step
 
-    def __init__(self, nb_batch, rows, cols, populations, device, observation_size=5, done_population=0.9, initial_grid=None):
+    def __init__(self, nb_batch, rows, cols, populations, device, observation_size=5, done_population=0.9, clever_pop_id = 0, initial_grid=None):
         """
         :param rows: number of rows in the grid.
         :param cols: number of columns in the grid.
@@ -52,6 +52,7 @@ class SquareSimulation:
         self.CIRC_KERNEL = torch.tensor([[1, 1, 1], [1, 0, 1], [1, 1, 1]], dtype=self.grid.dtype, device=self.device).view(1, 1, 3, 3)
         self.observation_size = observation_size
         self.done_population = done_population  # Population density threshold for done condition
+        self.clever_pop_id = clever_pop_id
 
     
     def colonization_phase(self):
@@ -248,7 +249,7 @@ class SquareSimulation:
 
 
     @profile
-    def step(self, action_grid=None):
+    def step(self, action_grid=None, oberservation_indices=None):
         """One full simulation iteration: colonization then conflict."""
         past_grid = self.grid.clone()
 
@@ -257,39 +258,50 @@ class SquareSimulation:
         if action_grid is not None:
             self.conflict_phase(action_grid)
 
-        self.fitness_growth()
-
         # Compute rewards
-        rewards, done_batch, info = self.compute_rewards(past_grid)
+        rewards, done_batch, info = self.compute_rewards(past_grid, oberservation_indices)
 
         return rewards, done_batch, info
 
-    def compute_rewards(self, past_grid):
-        """Compute rewards based on the change in fitness values.
+    def compute_rewards(self, past_grid, oberservation_indices=None, type="per_agent"):
+        diff = self.grid - past_grid                         # (B, P, R, C)
         
-        returns:
-            rewards: tensor of shape (nb_pop,)
-            done_batch: tensor of shape (batch_size,)
-            info: dict with additional information
-        """
+        if oberservation_indices is not None:
+            batch_idx, x_idx, y_idx = oberservation_indices.T
+            
+            if type == "per_agent":
+                rewards = diff[batch_idx, self.clever_pop_id, x_idx, y_idx]
+                
+            elif type == "per_population":
+                rewards_per_batch = diff[:, self.clever_pop_id, ...].mean(dim=(1, 2))  # (B, )
+                
+                # Same reward for agents in the same batch
+                rewards = rewards_per_batch[batch_idx]
+            else:
+                raise ValueError(f"Unknown type: {type}")
+            
+        else:
+            rewards = diff[:, self.clever_pop_id, ...].mean()
+            
 
-        rewards = self.grid - past_grid
-        rewards = rewards.sum(dim=(0, 2, 3))
-        rewards = rewards / (self.rows * self.cols)  # Normalize by the number of cells
+        # done & killed per batch, per pop
+        done_per_pop   = (self.grid > SquareSimulation.EPS).sum((2, 3)) \
+                        / (self.rows * self.cols) > self.done_population
+        killed_per_pop = ~(past_grid > SquareSimulation.EPS).any((2, 3))
 
-        # Define done if one population populates x% of the grid
-        done_batch_per_pop = torch.sum(self.grid > SquareSimulation.EPS, dim=(2, 3)) / (self.rows * self.cols) > self.done_population
-        done_batch = done_batch_per_pop.any(dim=1)  # Check if any population has reached the threshold in each batch
+        # take the clever population only
+        done_batch   = done_per_pop[:,   self.clever_pop_id] # (B,)
+        killed_batch = killed_per_pop[:, self.clever_pop_id] # (B,)
+        
 
-        # TODO We could add bigger reward for the population that reached the threshold
-        # rewards += done_batch_per_pop.sum(dim=0) * self.REWARD_FOR_DONE
+        if oberservation_indices is not None:
+            batch_idx, x_idx, y_idx = oberservation_indices.T
+            
+            # Penalize all with batch idx corresponding to a killed batch
+            killed_obs = killed_batch[batch_idx]
+            rewards[killed_obs] -= self.REWARD_FOR_DONE
 
-        info = {
-            # TODO @Romain: Add more info for logging
-        }
-
-        # Reset done batches only
-        self.reset(done_batch.nonzero(as_tuple=True)[0])
+        info = {}  # add whatever you need for logging
 
         return rewards, done_batch, info
 
