@@ -168,7 +168,7 @@ def run_visual_simulation_grid(simulation, interval=500, iterations=100, populat
             plt.savefig(filepath, dpi=300, bbox_inches='tight')
 
     def update(frame):
-        action_grid = simulation.configurable_actions_grid(type1='giving', type2='attacking', type3='random')
+        action_grid = simulation.configurable_actions_grid(type1='giving', type2='attacking', type3='complete')
 
         #action_grid = random_action_grid(simulation.batch_size, simulation.rows, simulation.cols, simulation.device)
 

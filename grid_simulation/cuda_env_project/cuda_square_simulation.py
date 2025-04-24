@@ -16,13 +16,15 @@ except NameError:
 
 class SquareSimulation:
     FITNESS_DONATION = 0.2  # Percentage of fitness donated to the neighbor
-    FITNESS_DONATION_BONUS = 0.0
+    #FITNESS_DONATION_BONUS = 0.0
     EPS = 1e-6
     COLONIZE_PROB_ONE = 2 # 2 fitness for prob 100% of colonization
     REWARD_FOR_DONE = 1.0  # Reward for reaching the done condition
-    FITNESS_GROWTH_VALUE = 0.01 # number of fitness points gained at every step
+    #FITNESS_GROWTH_VALUE = 0.01 # number of fitness points gained at every step
 
-    def __init__(self, nb_batch, rows, cols, populations, device, observation_size=5, done_population=0.9, clever_pop_id = 0, initial_grid=None):
+    def __init__(self, nb_batch, rows, cols, populations, device, observation_size=5, 
+                 done_population=0.9, clever_pop_id = 0, initial_grid=None,
+                 FITNESS_DONATION_BONUS=0.0, FITNESS_GROWTH_VALUE=0.0):
         """
         :param rows: number of rows in the grid.
         :param cols: number of columns in the grid.
@@ -33,6 +35,9 @@ class SquareSimulation:
         self.rows = rows
         self.cols = cols
         self.batch_size = nb_batch
+
+        self.FITNESS_DONATION_BONUS = FITNESS_DONATION_BONUS
+        self.FITNESS_GROWTH_VALUE = FITNESS_GROWTH_VALUE
         
         # Associate an id to each population
         self.populations = populations  # population parameters
@@ -100,10 +105,11 @@ class SquareSimulation:
         # If action = 0, do nothing
         # If action = 1-8, give fitness to the cell in the direction of the action
         # If action = 9-16, attack the opponent cell
-        flat_grid, _ = torch.max(self.grid, dim=1, keepdim=True)  # shape: (batch, 1, n, m)
 
         # Donnations
         self.manage_donations(action_grid)
+
+        flat_grid, _ = torch.max(self.grid, dim=1, keepdim=True)  # shape: (batch, 1, n, m)
 
         # Attacks
         self.manage_attacks(flat_grid, action_grid)
@@ -251,6 +257,8 @@ class SquareSimulation:
 
         # Compute rewards
         rewards, done_batch, info = self.compute_rewards(past_grid, oberservation_indices)
+
+        self.fitness_growth()
 
         return rewards, done_batch, info
 
