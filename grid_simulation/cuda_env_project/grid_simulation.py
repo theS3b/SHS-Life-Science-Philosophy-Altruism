@@ -90,7 +90,7 @@ def get_rgb_map(simulation, ax, action_grid = None):
     rgb_map = np.zeros((rows, cols, 3))
 
     # Get the maximum fitness
-    max_fitness = 2#grid0.max() # /!\ the max fitness is redefined at each step
+    max_fitness = 2 #grid0.max() # /!\ the max fitness is redefined at each step
     
     # Normalize the fitness values to the range [0.2, 1] to define the color intensity
     norm_fitness = np.clip(grid0/max_fitness, 0.2, 1).max(axis=0)
