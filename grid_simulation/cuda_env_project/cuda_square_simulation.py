@@ -428,12 +428,8 @@ class SquareSimulation:
             return self.get_random_action_grid() * population_mask
         
         # This agent that only gives fitness to its allies
-        elif type == 'giving':
+        if type == 'giving':
             allowed_actions[:,:,:, 9:] = -1
-
-        # This agent that only attacks its enemies
-        elif type == 'attacking':
-            allowed_actions[:,:,:, :9] = -1
 
         # if the type is not defined above, we return an intelligent agent that has acces to every action
 
@@ -476,8 +472,14 @@ class SquareSimulation:
                 allowed_actions[b,r,c, attack_action] = -1
 
                 # donation if neighbors is not a ally donation is forbidden
-                b, r, c = torch.where(~ally_n & ally_mask)
+                b, r, c = torch.where(~(ally_n|empty_n) & ally_mask)
                 allowed_actions[b,r,c, donnation_action] = -1
+
+                # This agent that only attacks its enemies
+                # He can donnate to empty cells only
+                if type == 'attacking':
+                    b, r, c = torch.where(~empty_n & ally_mask)
+                    allowed_actions[b,r,c, donnation_action] = -1
 
         # Create a mask to cancel other populatin actions
         population_mask = (self.grid[:, population_id] > EPS)
