@@ -16,7 +16,7 @@ except NameError:
 
 class SquareSimulation:
     FITNESS_DONATION = 0.1  # Percentage of fitness donated to the neighbor
-    FITNESS_DONATION_BONUS = 0.1
+    FITNESS_DONATION_BONUS = 0.0
     EPS = 1e-6
     COLONIZE_PROB_ONE = 2 # 2 fitness for prob 100% of colonization
     REWARD_FOR_DONE = 1.0  # Reward for reaching the done condition
