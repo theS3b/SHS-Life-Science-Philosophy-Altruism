@@ -139,7 +139,12 @@ def run_visual_simulation_grid(simulation, interval=500, iterations=100, populat
     :param population_colors: List of color names corresponding to the populations.
            If None, defaults to ['red', 'blue', 'green'].
     """
-    SAVE_DIR = os.path.join(os.getcwd(), 'simulation_imgs')
+    SAVE_DIR = os.path.join(os.getcwd(), 'simulation_imgs/FULL_SIMULATION')
+
+    if not os.path.exists(SAVE_DIR):
+        os.makedirs(SAVE_DIR)
+
+
     # Set up the figure and axis.
     fig, ax = plt.subplots()
     ax.set_aspect('equal')
