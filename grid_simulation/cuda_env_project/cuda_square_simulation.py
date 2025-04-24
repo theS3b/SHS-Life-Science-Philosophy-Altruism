@@ -112,8 +112,8 @@ class SquareSimulation:
     def manage_donations(self, action_grid):
         # 0. shorthand
         B, P, H, W = self.grid.shape
-        EPS = 1e-6
-        DON = 0.1                 # 0 < DON ≤ 1, e.g. 0.10
+        EPS = self.EPS
+        DON = self.FITNESS_DONATION                 # 0 < DON ≤ 1, e.g. 0.10
 
         # 1. prepare action mask (B,1,H,W) that broadcasts over populations 
         shifted_action = (action_grid - 1).unsqueeze(1)         # -1 means “no donation”
