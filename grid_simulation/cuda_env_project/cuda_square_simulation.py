@@ -110,65 +110,55 @@ class SquareSimulation:
 
     @profile
     def manage_donations(self, action_grid):
+        # 0. shorthand
+        B, P, H, W = self.grid.shape
+        EPS = SquareSimulation.EPS
+        DON = self.FITNESS_DONATION                 # 0 < DON ≤ 1, e.g. 0.10
 
-        # ── helpers ────────────────────────────────────────────────────────────────────
-        def roll_where(action_dir: int, shift: tuple[int, ...]) -> torch.Tensor:
-            """
-            Pick the donor cells whose action == action_dir, keep their fitness values
-            (for every population), roll them to the target neighbour position.
-            """
-            selected = torch.where(shifted_action == action_dir, self.grid, 0.0)
-            return torch.roll(selected, shifts=shift, dims=(2, 3))
- 
-        # 1. prepare one-hot action mask with a broadcastable shape (B,1,H,W)
-        shifted_action = (action_grid - 1).unsqueeze(1)         # (B,1,H,W)
+        # 1. prepare action mask (B,1,H,W) that broadcasts over populations 
+        shifted_action = (action_grid - 1).unsqueeze(1)         # -1 means “no donation”
 
-        # 2. fitness that flows to each neighbour, **per population**
-        up         = roll_where(0,  (-1,  0))
-        up_right   = roll_where(1,  (-1,  1))
-        right      = roll_where(2,  ( 0,  1))
-        down_right = roll_where(3,  ( 1,  1))
-        down       = roll_where(4,  ( 1,  0))
-        down_left  = roll_where(5,  ( 1, -1))
-        left       = roll_where(6,  ( 0, -1))
-        up_left    = roll_where(7,  (-1, -1))
+        # helper: pick donors for one direction, roll them to the neighbour
+        def roll_from_dir(direction: int, shift: tuple[int,int]) -> torch.Tensor:
+            donors = torch.where(shifted_action == direction, self.grid, 0.0)  # (B,P,H,W)
+            return torch.roll(donors, shifts=shift, dims=(2, 3))
 
-        contributions = (
-            up + up_right + right + down_right
-            + down + down_left + left + up_left
-        ) * self.FITNESS_DONATION                                     # (B,P,H,W)
+        #  2. donations sent to the eight neighbours (B,P,H,W)
+        contrib = (
+            roll_from_dir(0, (-1,  0))   # up
+            + roll_from_dir(1, (-1,  1))   # up-right
+            + roll_from_dir(2, ( 0,  1))   # right
+            + roll_from_dir(3, ( 1,  1))   # down-right
+            + roll_from_dir(4, ( 1,  0))   # down
+            + roll_from_dir(5, ( 1, -1))   # down-left
+            + roll_from_dir(6, ( 0, -1))   # left
+            + roll_from_dir(7, (-1, -1))   # up-left
+        ) * DON                                            # scale by the donation %
 
-        # 3. split the board into “occupied” and “empty” cells -------------------------
-        #    occupied_mask  : (B,1,H,W)  – at least one population present
-        #    empty_mask     : (B,1,H,W)  – all populations absent
-        occupied_mask = (self.grid > SquareSimulation.EPS).any(dim=1, keepdim=True)
-        empty_mask    = ~occupied_mask                               # logical negation
+        #  3. update fitness of the receivers
+        new_grid = self.grid + contrib                     # every pop keeps its identity
 
-        # a) cells that are already occupied – add donations only to populations present
-        contrib_occupied = (self.grid > SquareSimulation.EPS) * contributions
+        #  4. if the *source* cell donated, take the 10 % penalty --------------------
+        is_donor = (shifted_action >= 0) & (shifted_action <= 7)   # (B,1,H,W)
+        new_grid = torch.where(is_donor, new_grid * (1 - DON), new_grid)
 
-        # b) truly empty cells – give the whole pot to the population with max donation
-        #    (ties go to the first max; adjust if you want a different tie-break rule)
-        max_vals, argmax_pop = contributions.max(dim=1)              # both (B,H,W)
-        one_hot_max = F.one_hot(argmax_pop, num_classes=self.grid.size(1)) \
-                        .permute(0,3,1,2).float()                   # (B,P,H,W)
-        contrib_empty = one_hot_max * max_vals.unsqueeze(1) * empty_mask
+        #  5. handle cells that were completely empty before the step ---------------
+        #     • detect them using the *old* grid
+        #     • keep only the population that now has the largest value
+        empty_mask = (self.grid <= EPS).all(dim=1, keepdim=True)    # (B,1,H,W)
 
-        # 4. total donations received
-        contrib_total = contrib_occupied + contrib_empty             # (B,P,H,W)
+        if empty_mask.any():                                        # skip if none empty
+            # winner population in each empty cell
+            _, argmax_pop = new_grid.max(dim=1)                     # (B,H,W)
+            one_hot = torch.nn.functional.one_hot(argmax_pop, num_classes=P) \
+                        .permute(0,3,1,2).bool()                   # (B,P,H,W)
 
-        # 5. update recipient fitness
-        new_grid = self.grid + contrib_total
+            # zero-out the losers, *but only* in cells that were empty
+            new_grid = torch.where(empty_mask & ~one_hot, 0.0, new_grid)
 
-        # 6. penalise the donor cells (-x % to every population in the donor location)
-        donor_mask = (shifted_action >= 0) & (shifted_action <= 7)   # (B,1,H,W)
-        new_grid = torch.where(donor_mask, new_grid * (1 - self.FITNESS_DONATION),
-                            new_grid)
+        #  6. clamp negatives that might arise from numerical noise -----------------
+        self.grid = torch.clamp(new_grid, min=0.0)
 
-        # ensure no negatives
-        new_grid = torch.clamp(new_grid, min=0.0)
-
-        self.grid = new_grid
 
     @profile
     def manage_attacks(self, flat_grid, action_grid):
