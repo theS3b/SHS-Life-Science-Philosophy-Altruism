@@ -112,8 +112,8 @@ class SquareSimulation:
     def manage_donations(self, action_grid):
         # 0. shorthand
         B, P, H, W = self.grid.shape
-        EPS = SquareSimulation.EPS
-        DON = self.FITNESS_DONATION                 # 0 < DON ≤ 1, e.g. 0.10
+        EPS = 1e-6
+        DON = 0.1                 # 0 < DON ≤ 1, e.g. 0.10
 
         # 1. prepare action mask (B,1,H,W) that broadcasts over populations 
         shifted_action = (action_grid - 1).unsqueeze(1)         # -1 means “no donation”
@@ -136,25 +136,26 @@ class SquareSimulation:
         ) * DON                                            # scale by the donation %
 
         #  3. update fitness of the receivers
-        new_grid = self.grid + contrib                     # every pop keeps its identity
-
-        #  4. if the *source* cell donated, take the 10 % penalty --------------------
-        is_donor = (shifted_action >= 0) & (shifted_action <= 7)   # (B,1,H,W)
-        new_grid = torch.where(is_donor, new_grid * (1 - DON), new_grid)
+        new_possible_grid = self.grid + contrib                     # every pop keeps its identity
 
         #  5. handle cells that were completely empty before the step ---------------
         #     • detect them using the *old* grid
         #     • keep only the population that now has the largest value
         empty_mask = (self.grid <= EPS).all(dim=1, keepdim=True)    # (B,1,H,W)
 
-        if empty_mask.any():                                        # skip if none empty
-            # winner population in each empty cell
-            _, argmax_pop = new_grid.max(dim=1)                     # (B,H,W)
-            one_hot = torch.nn.functional.one_hot(argmax_pop, num_classes=P) \
-                        .permute(0,3,1,2).bool()                   # (B,P,H,W)
+        # skip if none empty
+        # winner population in each empty cell
+        _, argmax_pop = new_possible_grid.max(dim=1)                     # (B,H,W)
+        one_hot = torch.nn.functional.one_hot(argmax_pop, num_classes=P) \
+                    .permute(0,3,1,2).bool()                   # (B,P,H,W)
 
-            # zero-out the losers, *but only* in cells that were empty
-            new_grid = torch.where(empty_mask & ~one_hot, 0.0, new_grid)
+        actual_donnations = torch.where(empty_mask & one_hot, contrib, 0.0)  # (B,P,H,W)
+
+        new_grid = self.grid + actual_donnations
+
+        #  4. if the *source* cell donated, take the 10 % penalty --------------------
+        is_donor = (shifted_action >= 0) & (shifted_action <= 7)   # (B,1,H,W)
+        new_grid = torch.where(is_donor, new_grid * (1 - DON), new_grid)
 
         #  6. clamp negatives that might arise from numerical noise -----------------
         self.grid = torch.clamp(new_grid, min=0.0)
