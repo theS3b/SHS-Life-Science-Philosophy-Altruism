@@ -2,11 +2,11 @@ pop1 total fitness; pop2 total fitness; pop2 total fitness; pop1 \% fitness; pop
 Simulation: don_0.0_growth_0.0 - attack vs random
 
 Final population fitness:
-Population 1: attacking - 38.88975524902344
+Population 1: attacking - 39.45905303955078
 Population 2: random - 0.0
 Population 3: random - 0.0
 
-Total fitness: 38.88975524902344
+Total fitness: 39.45905303955078
 
 Final population %'s fitness:
 Population 1: attacking - 100.00%
@@ -17,41 +17,41 @@ Population 3: random - 0.00%
 Simulation: don_0.0_growth_0.0 - giving vs random
 
 Final population fitness:
-Population 1: giving - 6.253650326470961e-07
-Population 2: random - 1.1662321412586607e-05
-Population 3: random - 1.2375124242680613e-05
+Population 1: giving - 7.494199962820858e-07
+Population 2: random - 1.1789029485953506e-05
+Population 3: random - 1.1682645890687127e-05
 
-Total fitness: 2.466281148372218e-05
+Total fitness: 2.422109537292272e-05
 
 Final population %'s fitness:
-Population 1: giving - 2.54%
-Population 2: random - 47.29%
-Population 3: random - 50.18%
+Population 1: giving - 3.09%
+Population 2: random - 48.67%
+Population 3: random - 48.23%
 
 
 Simulation: don_0.0_growth_0.0 - complete vs random
 
 Final population fitness:
-Population 1: complete - 9.521773591814053e-08
-Population 2: random - 6.4422920331708156e-06
-Population 3: random - 6.335170837701298e-06
+Population 1: complete - 1.2874500043835724e-07
+Population 2: random - 6.041522738087224e-06
+Population 3: random - 5.907272679905873e-06
 
-Total fitness: 1.2872680599684827e-05
+Total fitness: 1.2077540304744616e-05
 
 Final population %'s fitness:
-Population 1: complete - 0.74%
-Population 2: random - 50.05%
-Population 3: random - 49.21%
+Population 1: complete - 1.07%
+Population 2: random - 50.02%
+Population 3: random - 48.91%
 
 
 Simulation: don_0.0_growth_0.0 - Complete vs Giving vs Attacking
 
 Final population fitness:
-Population 1: complete - 5.747425575464149e-07
+Population 1: complete - 0.0
 Population 2: giving - 0.0
-Population 3: attacking - 33.69875717163086
+Population 3: attacking - 33.622684478759766
 
-Total fitness: 33.69875717163086
+Total fitness: 33.622684478759766
 
 Final population %'s fitness:
 Population 1: complete - 0.00%
@@ -62,11 +62,11 @@ Population 3: attacking - 100.00%
 Simulation: don_0.0_growth_0.0 - Reinforcement Learning Agent vs Random
 
 Final population fitness:
-Population 1: Reinforcement Learning Agent - 44.755558013916016
-Population 2: random - 8.007828000700101e-06
-Population 3: random - 4.070116119692102e-05
+Population 1: Reinforcement Learning Agent - 44.49414825439453
+Population 2: random - 8.761746357777156e-06
+Population 3: random - 8.04538376542041e-06
 
-Total fitness: 44.75560760498047
+Total fitness: 44.494163513183594
 
 Final population %'s fitness:
 Population 1: Reinforcement Learning Agent - 100.00%
@@ -77,41 +77,41 @@ Population 3: random - 0.00%
 Simulation: don_0.0_growth_0.0 - Reinforcement Learning Agent vs Giving
 
 Final population fitness:
-Population 1: Reinforcement Learning Agent - 47.56029510498047
-Population 2: giving - 0.03928157314658165
-Population 3: giving - 0.037999872118234634
+Population 1: Reinforcement Learning Agent - 47.41685104370117
+Population 2: giving - 0.042621128261089325
+Population 3: giving - 0.04192367568612099
 
-Total fitness: 47.6375732421875
+Total fitness: 47.50139617919922
 
 Final population %'s fitness:
-Population 1: Reinforcement Learning Agent - 99.84%
-Population 2: giving - 0.08%
-Population 3: giving - 0.08%
+Population 1: Reinforcement Learning Agent - 99.82%
+Population 2: giving - 0.09%
+Population 3: giving - 0.09%
 
 
 Simulation: don_0.0_growth_0.0 - Reinforcement Learning Agent vs Attacker
 
 Final population fitness:
-Population 1: Reinforcement Learning Agent - 22.113941192626953
-Population 2: attacking - 27.252906799316406
-Population 3: attacking - 25.305192947387695
+Population 1: Reinforcement Learning Agent - 21.06650733947754
+Population 2: attacking - 26.53736114501953
+Population 3: attacking - 26.4993896484375
 
-Total fitness: 74.67204284667969
+Total fitness: 74.10325622558594
 
 Final population %'s fitness:
-Population 1: Reinforcement Learning Agent - 29.61%
-Population 2: attacking - 36.50%
-Population 3: attacking - 33.89%
+Population 1: Reinforcement Learning Agent - 28.43%
+Population 2: attacking - 35.81%
+Population 3: attacking - 35.76%
 
 
 Simulation: don_0.0_growth_0.1 - attack vs random
 
 Final population fitness:
-Population 1: attacking - 3616.964599609375
+Population 1: attacking - 3619.05419921875
 Population 2: random - 0.0
 Population 3: random - 0.0
 
-Total fitness: 3616.964599609375
+Total fitness: 3619.05419921875
 
 Final population %'s fitness:
 Population 1: attacking - 100.00%
@@ -122,11 +122,11 @@ Population 3: random - 0.00%
 Simulation: don_0.0_growth_0.1 - giving vs random
 
 Final population fitness:
-Population 1: giving - 224.93328857421875
+Population 1: giving - 225.02365112304688
 Population 2: random - 0.0
 Population 3: random - 0.0
 
-Total fitness: 224.93328857421875
+Total fitness: 225.02365112304688
 
 Final population %'s fitness:
 Population 1: giving - 100.00%
@@ -137,11 +137,11 @@ Population 3: random - 0.00%
 Simulation: don_0.0_growth_0.1 - complete vs random
 
 Final population fitness:
-Population 1: complete - 225.1535186767578
+Population 1: complete - 224.99468994140625
 Population 2: random - 0.0
 Population 3: random - 0.0
 
-Total fitness: 225.1535186767578
+Total fitness: 224.99468994140625
 
 Final population %'s fitness:
 Population 1: complete - 100.00%
@@ -152,11 +152,11 @@ Population 3: random - 0.00%
 Simulation: don_0.0_growth_0.1 - Complete vs Giving vs Attacking
 
 Final population fitness:
-Population 1: complete - 0.0
-Population 2: giving - 0.0
-Population 3: attacking - 3011.860107421875
+Population 1: complete - 0.03755994886159897
+Population 2: giving - 0.017451491206884384
+Population 3: attacking - 3017.44580078125
 
-Total fitness: 3011.860107421875
+Total fitness: 3017.500732421875
 
 Final population %'s fitness:
 Population 1: complete - 0.00%
@@ -167,56 +167,56 @@ Population 3: attacking - 100.00%
 Simulation: don_0.0_growth_0.1 - Reinforcement Learning Agent vs Random
 
 Final population fitness:
-Population 1: Reinforcement Learning Agent - 456.6156311035156
-Population 2: random - 45.73228073120117
-Population 3: random - 44.51675796508789
+Population 1: Reinforcement Learning Agent - 445.9884948730469
+Population 2: random - 45.59870529174805
+Population 3: random - 45.12053680419922
 
-Total fitness: 546.8646850585938
+Total fitness: 536.7077026367188
 
 Final population %'s fitness:
-Population 1: Reinforcement Learning Agent - 83.50%
-Population 2: random - 8.36%
-Population 3: random - 8.14%
+Population 1: Reinforcement Learning Agent - 83.10%
+Population 2: random - 8.50%
+Population 3: random - 8.41%
 
 
 Simulation: don_0.0_growth_0.1 - Reinforcement Learning Agent vs Giving
 
 Final population fitness:
-Population 1: Reinforcement Learning Agent - 509.38397216796875
-Population 2: giving - 107.89549255371094
-Population 3: giving - 107.55372619628906
+Population 1: Reinforcement Learning Agent - 517.706787109375
+Population 2: giving - 107.65039825439453
+Population 3: giving - 107.5543212890625
 
-Total fitness: 724.8331909179688
+Total fitness: 732.9114990234375
 
 Final population %'s fitness:
-Population 1: Reinforcement Learning Agent - 70.28%
-Population 2: giving - 14.89%
-Population 3: giving - 14.84%
+Population 1: Reinforcement Learning Agent - 70.64%
+Population 2: giving - 14.69%
+Population 3: giving - 14.67%
 
 
 Simulation: don_0.0_growth_0.1 - Reinforcement Learning Agent vs Attacker
 
 Final population fitness:
-Population 1: Reinforcement Learning Agent - 0.8576393723487854
-Population 2: attacking - 1278.7919921875
-Population 3: attacking - 1267.9864501953125
+Population 1: Reinforcement Learning Agent - 0.7514322400093079
+Population 2: attacking - 1275.0633544921875
+Population 3: attacking - 1269.419677734375
 
-Total fitness: 2547.63623046875
+Total fitness: 2545.234375
 
 Final population %'s fitness:
 Population 1: Reinforcement Learning Agent - 0.03%
-Population 2: attacking - 50.20%
-Population 3: attacking - 49.77%
+Population 2: attacking - 50.10%
+Population 3: attacking - 49.87%
 
 
 Simulation: don_0.1_growth_0.0 - attack vs random
 
 Final population fitness:
-Population 1: attacking - 39.174415588378906
+Population 1: attacking - 39.28483200073242
 Population 2: random - 0.0
 Population 3: random - 0.0
 
-Total fitness: 39.174415588378906
+Total fitness: 39.28483200073242
 
 Final population %'s fitness:
 Population 1: attacking - 100.00%
@@ -227,31 +227,31 @@ Population 3: random - 0.00%
 Simulation: don_0.1_growth_0.0 - giving vs random
 
 Final population fitness:
-Population 1: giving - 5.265404183774081e-07
-Population 2: random - 1.1050670764234383e-05
-Population 3: random - 1.08040339910076e-05
+Population 1: giving - 7.541420927736908e-07
+Population 2: random - 1.1818003258667886e-05
+Population 3: random - 1.2203351616335567e-05
 
-Total fitness: 2.2381245798896998e-05
+Total fitness: 2.4775497877271846e-05
 
 Final population %'s fitness:
-Population 1: giving - 2.35%
-Population 2: random - 49.37%
-Population 3: random - 48.27%
+Population 1: giving - 3.04%
+Population 2: random - 47.70%
+Population 3: random - 49.26%
 
 
 Simulation: don_0.1_growth_0.0 - complete vs random
 
 Final population fitness:
-Population 1: complete - 8.418557939648963e-08
-Population 2: random - 6.555727395607391e-06
-Population 3: random - 4.915423687634757e-06
+Population 1: complete - 1.1461870741413804e-07
+Population 2: random - 6.1470123000617605e-06
+Population 3: random - 6.131722784630256e-06
 
-Total fitness: 1.1555336641322356e-05
+Total fitness: 1.2393353244988248e-05
 
 Final population %'s fitness:
-Population 1: complete - 0.73%
-Population 2: random - 56.73%
-Population 3: random - 42.54%
+Population 1: complete - 0.92%
+Population 2: random - 49.60%
+Population 3: random - 49.48%
 
 
 Simulation: don_0.1_growth_0.0 - Complete vs Giving vs Attacking
@@ -259,9 +259,9 @@ Simulation: don_0.1_growth_0.0 - Complete vs Giving vs Attacking
 Final population fitness:
 Population 1: complete - 0.0
 Population 2: giving - 0.0
-Population 3: attacking - 32.71877670288086
+Population 3: attacking - 33.241432189941406
 
-Total fitness: 32.71877670288086
+Total fitness: 33.241432189941406
 
 Final population %'s fitness:
 Population 1: complete - 0.00%
@@ -272,11 +272,11 @@ Population 3: attacking - 100.00%
 Simulation: don_0.1_growth_0.0 - Reinforcement Learning Agent vs Random
 
 Final population fitness:
-Population 1: Reinforcement Learning Agent - 43.64299011230469
-Population 2: random - 7.292187547136564e-06
-Population 3: random - 1.0189821296080481e-05
+Population 1: Reinforcement Learning Agent - 44.26914596557617
+Population 2: random - 7.511329386034049e-06
+Population 3: random - 7.752647434244864e-06
 
-Total fitness: 43.643009185791016
+Total fitness: 44.269161224365234
 
 Final population %'s fitness:
 Population 1: Reinforcement Learning Agent - 100.00%
@@ -287,41 +287,41 @@ Population 3: random - 0.00%
 Simulation: don_0.1_growth_0.0 - Reinforcement Learning Agent vs Giving
 
 Final population fitness:
-Population 1: Reinforcement Learning Agent - 46.71828079223633
-Population 2: giving - 0.04962903633713722
-Population 3: giving - 0.04679754376411438
+Population 1: Reinforcement Learning Agent - 47.41606140136719
+Population 2: giving - 0.042373672127723694
+Population 3: giving - 0.04286224767565727
 
-Total fitness: 46.8147087097168
+Total fitness: 47.50129699707031
 
 Final population %'s fitness:
-Population 1: Reinforcement Learning Agent - 99.79%
-Population 2: giving - 0.11%
-Population 3: giving - 0.10%
+Population 1: Reinforcement Learning Agent - 99.82%
+Population 2: giving - 0.09%
+Population 3: giving - 0.09%
 
 
 Simulation: don_0.1_growth_0.0 - Reinforcement Learning Agent vs Attacker
 
 Final population fitness:
-Population 1: Reinforcement Learning Agent - 20.8588809967041
-Population 2: attacking - 26.381128311157227
-Population 3: attacking - 26.10299301147461
+Population 1: Reinforcement Learning Agent - 21.34154510498047
+Population 2: attacking - 26.452199935913086
+Population 3: attacking - 26.287761688232422
 
-Total fitness: 73.34300231933594
+Total fitness: 74.08151245117188
 
 Final population %'s fitness:
-Population 1: Reinforcement Learning Agent - 28.44%
-Population 2: attacking - 35.97%
-Population 3: attacking - 35.59%
+Population 1: Reinforcement Learning Agent - 28.81%
+Population 2: attacking - 35.71%
+Population 3: attacking - 35.48%
 
 
 Simulation: don_0.1_growth_0.1 - attack vs random
 
 Final population fitness:
-Population 1: attacking - 3614.11669921875
+Population 1: attacking - 3618.252685546875
 Population 2: random - 0.0
 Population 3: random - 0.0
 
-Total fitness: 3614.11669921875
+Total fitness: 3618.252685546875
 
 Final population %'s fitness:
 Population 1: attacking - 100.00%
@@ -332,11 +332,11 @@ Population 3: random - 0.00%
 Simulation: don_0.1_growth_0.1 - giving vs random
 
 Final population fitness:
-Population 1: giving - 224.927734375
+Population 1: giving - 224.98744201660156
 Population 2: random - 0.0
 Population 3: random - 0.0
 
-Total fitness: 224.927734375
+Total fitness: 224.98744201660156
 
 Final population %'s fitness:
 Population 1: giving - 100.00%
@@ -347,11 +347,11 @@ Population 3: random - 0.00%
 Simulation: don_0.1_growth_0.1 - complete vs random
 
 Final population fitness:
-Population 1: complete - 225.00062561035156
+Population 1: complete - 224.9927978515625
 Population 2: random - 0.0
 Population 3: random - 0.0
 
-Total fitness: 225.00062561035156
+Total fitness: 224.9927978515625
 
 Final population %'s fitness:
 Population 1: complete - 100.00%
@@ -362,11 +362,11 @@ Population 3: random - 0.00%
 Simulation: don_0.1_growth_0.1 - Complete vs Giving vs Attacking
 
 Final population fitness:
-Population 1: complete - 0.0
-Population 2: giving - 0.0
-Population 3: attacking - 2999.44091796875
+Population 1: complete - 0.002797391265630722
+Population 2: giving - 0.001488884212449193
+Population 3: attacking - 3018.3525390625
 
-Total fitness: 2999.44091796875
+Total fitness: 3018.35693359375
 
 Final population %'s fitness:
 Population 1: complete - 0.00%
@@ -377,56 +377,56 @@ Population 3: attacking - 100.00%
 Simulation: don_0.1_growth_0.1 - Reinforcement Learning Agent vs Random
 
 Final population fitness:
-Population 1: Reinforcement Learning Agent - 445.6891784667969
-Population 2: random - 44.216304779052734
-Population 3: random - 46.58533477783203
+Population 1: Reinforcement Learning Agent - 449.4072265625
+Population 2: random - 45.150997161865234
+Population 3: random - 45.44796371459961
 
-Total fitness: 536.4908447265625
+Total fitness: 540.0061645507812
 
 Final population %'s fitness:
-Population 1: Reinforcement Learning Agent - 83.07%
-Population 2: random - 8.24%
-Population 3: random - 8.68%
+Population 1: Reinforcement Learning Agent - 83.22%
+Population 2: random - 8.36%
+Population 3: random - 8.42%
 
 
 Simulation: don_0.1_growth_0.1 - Reinforcement Learning Agent vs Giving
 
 Final population fitness:
-Population 1: Reinforcement Learning Agent - 515.0496826171875
-Population 2: giving - 106.5120620727539
-Population 3: giving - 108.80099487304688
+Population 1: Reinforcement Learning Agent - 516.852294921875
+Population 2: giving - 107.55242156982422
+Population 3: giving - 107.86489868164062
 
-Total fitness: 730.36279296875
+Total fitness: 732.2696533203125
 
 Final population %'s fitness:
-Population 1: Reinforcement Learning Agent - 70.52%
-Population 2: giving - 14.58%
-Population 3: giving - 14.90%
+Population 1: Reinforcement Learning Agent - 70.58%
+Population 2: giving - 14.69%
+Population 3: giving - 14.73%
 
 
 Simulation: don_0.1_growth_0.1 - Reinforcement Learning Agent vs Attacker
 
 Final population fitness:
-Population 1: Reinforcement Learning Agent - 1.0229026079177856
-Population 2: attacking - 1277.0965576171875
-Population 3: attacking - 1260.4664306640625
+Population 1: Reinforcement Learning Agent - 0.864149808883667
+Population 2: attacking - 1265.9190673828125
+Population 3: attacking - 1279.9462890625
 
-Total fitness: 2538.5859375
+Total fitness: 2546.7294921875
 
 Final population %'s fitness:
-Population 1: Reinforcement Learning Agent - 0.04%
-Population 2: attacking - 50.31%
-Population 3: attacking - 49.65%
+Population 1: Reinforcement Learning Agent - 0.03%
+Population 2: attacking - 49.71%
+Population 3: attacking - 50.26%
 
 
 Simulation: don_0.2_growth_0.0 - attack vs random
 
 Final population fitness:
-Population 1: attacking - 39.52668762207031
+Population 1: attacking - 39.29529571533203
 Population 2: random - 0.0
 Population 3: random - 0.0
 
-Total fitness: 39.52668762207031
+Total fitness: 39.29529571533203
 
 Final population %'s fitness:
 Population 1: attacking - 100.00%
@@ -437,41 +437,41 @@ Population 3: random - 0.00%
 Simulation: don_0.2_growth_0.0 - giving vs random
 
 Final population fitness:
-Population 1: giving - 5.548165518121095e-07
-Population 2: random - 1.0728067536547314e-05
-Population 3: random - 1.181006427941611e-05
+Population 1: giving - 6.851525995443808e-07
+Population 2: random - 1.2253399290784728e-05
+Population 3: random - 1.1721313057933003e-05
 
-Total fitness: 2.3092947230907157e-05
+Total fitness: 2.4659864720888436e-05
 
 Final population %'s fitness:
-Population 1: giving - 2.40%
-Population 2: random - 46.46%
-Population 3: random - 51.14%
+Population 1: giving - 2.78%
+Population 2: random - 49.69%
+Population 3: random - 47.53%
 
 
 Simulation: don_0.2_growth_0.0 - complete vs random
 
 Final population fitness:
-Population 1: complete - 1.3765252049324772e-07
-Population 2: random - 5.048591901868349e-06
-Population 3: random - 6.257734185055597e-06
+Population 1: complete - 1.2783668523752567e-07
+Population 2: random - 6.03206126470468e-06
+Population 3: random - 5.998540473228786e-06
 
-Total fitness: 1.144397901953198e-05
+Total fitness: 1.2158438039477915e-05
 
 Final population %'s fitness:
-Population 1: complete - 1.20%
-Population 2: random - 44.12%
-Population 3: random - 54.68%
+Population 1: complete - 1.05%
+Population 2: random - 49.61%
+Population 3: random - 49.34%
 
 
 Simulation: don_0.2_growth_0.0 - Complete vs Giving vs Attacking
 
 Final population fitness:
-Population 1: complete - 0.0
+Population 1: complete - 4.513188045507377e-08
 Population 2: giving - 0.0
-Population 3: attacking - 33.37815856933594
+Population 3: attacking - 33.445556640625
 
-Total fitness: 33.37815856933594
+Total fitness: 33.445556640625
 
 Final population %'s fitness:
 Population 1: complete - 0.00%
@@ -482,11 +482,11 @@ Population 3: attacking - 100.00%
 Simulation: don_0.2_growth_0.0 - Reinforcement Learning Agent vs Random
 
 Final population fitness:
-Population 1: Reinforcement Learning Agent - 45.33409118652344
-Population 2: random - 7.076833298924612e-06
-Population 3: random - 6.416223641281249e-06
+Population 1: Reinforcement Learning Agent - 44.31913757324219
+Population 2: random - 8.76558533491334e-06
+Population 3: random - 1.1575147254916374e-05
 
-Total fitness: 45.3341064453125
+Total fitness: 44.319156646728516
 
 Final population %'s fitness:
 Population 1: Reinforcement Learning Agent - 100.00%
@@ -497,41 +497,41 @@ Population 3: random - 0.00%
 Simulation: don_0.2_growth_0.0 - Reinforcement Learning Agent vs Giving
 
 Final population fitness:
-Population 1: Reinforcement Learning Agent - 47.4141731262207
-Population 2: giving - 0.025573471561074257
-Population 3: giving - 0.04579450190067291
+Population 1: Reinforcement Learning Agent - 47.345462799072266
+Population 2: giving - 0.0359468013048172
+Population 3: giving - 0.038827549666166306
 
-Total fitness: 47.48554229736328
+Total fitness: 47.42023468017578
 
 Final population %'s fitness:
-Population 1: Reinforcement Learning Agent - 99.85%
-Population 2: giving - 0.05%
-Population 3: giving - 0.10%
+Population 1: Reinforcement Learning Agent - 99.84%
+Population 2: giving - 0.08%
+Population 3: giving - 0.08%
 
 
 Simulation: don_0.2_growth_0.0 - Reinforcement Learning Agent vs Attacker
 
 Final population fitness:
-Population 1: Reinforcement Learning Agent - 22.225908279418945
-Population 2: attacking - 26.60078239440918
-Population 3: attacking - 26.590869903564453
+Population 1: Reinforcement Learning Agent - 20.983366012573242
+Population 2: attacking - 26.63777732849121
+Population 3: attacking - 26.29962158203125
 
-Total fitness: 75.41755676269531
+Total fitness: 73.92076110839844
 
 Final population %'s fitness:
-Population 1: Reinforcement Learning Agent - 29.47%
-Population 2: attacking - 35.27%
-Population 3: attacking - 35.26%
+Population 1: Reinforcement Learning Agent - 28.39%
+Population 2: attacking - 36.04%
+Population 3: attacking - 35.58%
 
 
 Simulation: don_0.0_growth_0.2 - attack vs random
 
 Final population fitness:
-Population 1: attacking - 7199.32373046875
+Population 1: attacking - 7206.70849609375
 Population 2: random - 0.0
 Population 3: random - 0.0
 
-Total fitness: 7199.32373046875
+Total fitness: 7206.70849609375
 
 Final population %'s fitness:
 Population 1: attacking - 100.00%
@@ -542,11 +542,11 @@ Population 3: random - 0.00%
 Simulation: don_0.0_growth_0.2 - giving vs random
 
 Final population fitness:
-Population 1: giving - 449.7453308105469
+Population 1: giving - 450.01824951171875
 Population 2: random - 0.0
 Population 3: random - 0.0
 
-Total fitness: 449.7453308105469
+Total fitness: 450.01824951171875
 
 Final population %'s fitness:
 Population 1: giving - 100.00%
@@ -557,11 +557,11 @@ Population 3: random - 0.00%
 Simulation: don_0.0_growth_0.2 - complete vs random
 
 Final population fitness:
-Population 1: complete - 449.9195861816406
+Population 1: complete - 450.00830078125
 Population 2: random - 0.0
 Population 3: random - 0.0
 
-Total fitness: 449.9195861816406
+Total fitness: 450.00830078125
 
 Final population %'s fitness:
 Population 1: complete - 100.00%
@@ -572,11 +572,11 @@ Population 3: random - 0.00%
 Simulation: don_0.0_growth_0.2 - Complete vs Giving vs Attacking
 
 Final population fitness:
-Population 1: complete - 0.0
-Population 2: giving - 0.0
-Population 3: attacking - 6046.64306640625
+Population 1: complete - 0.006844236049801111
+Population 2: giving - 0.003204758744686842
+Population 3: attacking - 6007.6640625
 
-Total fitness: 6046.64306640625
+Total fitness: 6007.67431640625
 
 Final population %'s fitness:
 Population 1: complete - 0.00%
@@ -587,56 +587,56 @@ Population 3: attacking - 100.00%
 Simulation: don_0.0_growth_0.2 - Reinforcement Learning Agent vs Random
 
 Final population fitness:
-Population 1: Reinforcement Learning Agent - 849.1551513671875
-Population 2: random - 87.31192779541016
-Population 3: random - 94.48599243164062
+Population 1: Reinforcement Learning Agent - 853.4109497070312
+Population 2: random - 90.76749420166016
+Population 3: random - 90.60868835449219
 
-Total fitness: 1030.953125
+Total fitness: 1034.787109375
 
 Final population %'s fitness:
-Population 1: Reinforcement Learning Agent - 82.37%
-Population 2: random - 8.47%
-Population 3: random - 9.16%
+Population 1: Reinforcement Learning Agent - 82.47%
+Population 2: random - 8.77%
+Population 3: random - 8.76%
 
 
 Simulation: don_0.0_growth_0.2 - Reinforcement Learning Agent vs Giving
 
 Final population fitness:
-Population 1: Reinforcement Learning Agent - 985.0877075195312
-Population 2: giving - 215.0689697265625
-Population 3: giving - 213.69485473632812
+Population 1: Reinforcement Learning Agent - 987.128662109375
+Population 2: giving - 214.6845703125
+Population 3: giving - 215.42584228515625
 
-Total fitness: 1413.8515625
+Total fitness: 1417.239013671875
 
 Final population %'s fitness:
-Population 1: Reinforcement Learning Agent - 69.67%
-Population 2: giving - 15.21%
-Population 3: giving - 15.11%
+Population 1: Reinforcement Learning Agent - 69.65%
+Population 2: giving - 15.15%
+Population 3: giving - 15.20%
 
 
 Simulation: don_0.0_growth_0.2 - Reinforcement Learning Agent vs Attacker
 
 Final population fitness:
-Population 1: Reinforcement Learning Agent - 0.4874657690525055
-Population 2: attacking - 2580.22265625
-Population 3: attacking - 2494.958984375
+Population 1: Reinforcement Learning Agent - 0.47301405668258667
+Population 2: attacking - 2531.202392578125
+Population 3: attacking - 2533.64501953125
 
-Total fitness: 5075.6689453125
+Total fitness: 5065.3203125
 
 Final population %'s fitness:
 Population 1: Reinforcement Learning Agent - 0.01%
-Population 2: attacking - 50.84%
-Population 3: attacking - 49.16%
+Population 2: attacking - 49.97%
+Population 3: attacking - 50.02%
 
 
 Simulation: don_0.2_growth_0.2 - attack vs random
 
 Final population fitness:
-Population 1: attacking - 7212.2919921875
+Population 1: attacking - 7207.3046875
 Population 2: random - 0.0
 Population 3: random - 0.0
 
-Total fitness: 7212.2919921875
+Total fitness: 7207.3046875
 
 Final population %'s fitness:
 Population 1: attacking - 100.00%
@@ -647,11 +647,11 @@ Population 3: random - 0.00%
 Simulation: don_0.2_growth_0.2 - giving vs random
 
 Final population fitness:
-Population 1: giving - 449.84515380859375
+Population 1: giving - 449.939697265625
 Population 2: random - 0.0
 Population 3: random - 0.0
 
-Total fitness: 449.84515380859375
+Total fitness: 449.939697265625
 
 Final population %'s fitness:
 Population 1: giving - 100.00%
@@ -662,11 +662,11 @@ Population 3: random - 0.00%
 Simulation: don_0.2_growth_0.2 - complete vs random
 
 Final population fitness:
-Population 1: complete - 449.875
+Population 1: complete - 450.0058288574219
 Population 2: random - 0.0
 Population 3: random - 0.0
 
-Total fitness: 449.875
+Total fitness: 450.0058288574219
 
 Final population %'s fitness:
 Population 1: complete - 100.00%
@@ -677,11 +677,11 @@ Population 3: random - 0.00%
 Simulation: don_0.2_growth_0.2 - Complete vs Giving vs Attacking
 
 Final population fitness:
-Population 1: complete - 0.0
-Population 2: giving - 0.0
-Population 3: attacking - 6043.50537109375
+Population 1: complete - 0.015816979110240936
+Population 2: giving - 0.02488761767745018
+Population 3: attacking - 6013.63525390625
 
-Total fitness: 6043.50537109375
+Total fitness: 6013.67578125
 
 Final population %'s fitness:
 Population 1: complete - 0.00%
@@ -692,45 +692,45 @@ Population 3: attacking - 100.00%
 Simulation: don_0.2_growth_0.2 - Reinforcement Learning Agent vs Random
 
 Final population fitness:
-Population 1: Reinforcement Learning Agent - 836.4984130859375
-Population 2: random - 94.44554901123047
-Population 3: random - 87.62610626220703
+Population 1: Reinforcement Learning Agent - 846.6011962890625
+Population 2: random - 91.35836791992188
+Population 3: random - 90.31806182861328
 
-Total fitness: 1018.570068359375
+Total fitness: 1028.2777099609375
 
 Final population %'s fitness:
-Population 1: Reinforcement Learning Agent - 82.12%
-Population 2: random - 9.27%
-Population 3: random - 8.60%
+Population 1: Reinforcement Learning Agent - 82.33%
+Population 2: random - 8.88%
+Population 3: random - 8.78%
 
 
 Simulation: don_0.2_growth_0.2 - Reinforcement Learning Agent vs Giving
 
 Final population fitness:
-Population 1: Reinforcement Learning Agent - 978.0365600585938
-Population 2: giving - 216.66851806640625
-Population 3: giving - 213.74269104003906
+Population 1: Reinforcement Learning Agent - 987.8410034179688
+Population 2: giving - 215.21629333496094
+Population 3: giving - 215.3637237548828
 
-Total fitness: 1408.44775390625
+Total fitness: 1418.4210205078125
 
 Final population %'s fitness:
-Population 1: Reinforcement Learning Agent - 69.44%
-Population 2: giving - 15.38%
+Population 1: Reinforcement Learning Agent - 69.64%
+Population 2: giving - 15.17%
 Population 3: giving - 15.18%
 
 
 Simulation: don_0.2_growth_0.2 - Reinforcement Learning Agent vs Attacker
 
 Final population fitness:
-Population 1: Reinforcement Learning Agent - 0.1417340487241745
-Population 2: attacking - 2588.022216796875
-Population 3: attacking - 2482.80908203125
+Population 1: Reinforcement Learning Agent - 0.4765675663948059
+Population 2: attacking - 2527.5478515625
+Population 3: attacking - 2537.033935546875
 
-Total fitness: 5070.97314453125
+Total fitness: 5065.05859375
 
 Final population %'s fitness:
-Population 1: Reinforcement Learning Agent - 0.00%
-Population 2: attacking - 51.04%
-Population 3: attacking - 48.96%
+Population 1: Reinforcement Learning Agent - 0.01%
+Population 2: attacking - 49.90%
+Population 3: attacking - 50.09%
 
 
