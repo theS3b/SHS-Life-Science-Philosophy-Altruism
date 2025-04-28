@@ -139,7 +139,7 @@ class SquareSimulation:
             + roll_from_dir(5, ( 1, -1))   # down-left
             + roll_from_dir(6, ( 0, -1))   # left
             + roll_from_dir(7, (-1, -1))   # up-left
-        ) * DON                                            # scale by the donation %
+        ) * (DON + self.FITNESS_DONATION_BONUS) # scale by the donation + donation bonus % 
 
         #  3. update fitness of the receivers
         new_possible_grid = self.grid + contrib                     # every pop keeps its identity
