@@ -24,7 +24,7 @@ class SquareSimulation:
 
     def __init__(self, nb_batch, rows, cols, populations, device, observation_size=5, 
                  done_population=0.9, clever_pop_id = 0, initial_grid=None,
-                 FITNESS_DONATION_BONUS=0.0, FITNESS_GROWTH_VALUE=0.0):
+                 FITNESS_DONATION_BONUS=0.0, FITNESS_GROWTH_VALUE=0.1):
         """
         :param rows: number of rows in the grid.
         :param cols: number of columns in the grid.
@@ -120,6 +120,7 @@ class SquareSimulation:
         B, P, H, W = self.grid.shape
         EPS = self.EPS
         DON = self.FITNESS_DONATION                 # 0 < DON ≤ 1, e.g. 0.10
+        BONUS_DON = self.FITNESS_DONATION_BONUS
 
         # 1. prepare action mask (B,1,H,W) that broadcasts over populations 
         shifted_action = (action_grid - 1).unsqueeze(1)         # -1 means “no donation”
@@ -139,12 +140,12 @@ class SquareSimulation:
             + roll_from_dir(5, ( 1, -1))   # down-left
             + roll_from_dir(6, ( 0, -1))   # left
             + roll_from_dir(7, (-1, -1))   # up-left
-        ) * (DON + self.FITNESS_DONATION_BONUS) # scale by the donation + donation bonus % 
+        ) * (DON + BONUS_DON)   # scale by the donation + donation bonus % 
 
         #  3. update fitness of the receivers
         new_possible_grid = self.grid + contrib                     # every pop keeps its identity
 
-        #  5. handle cells that were completely empty before the step ---------------
+        #  4. handle cells that were completely empty before the step ---------------
         #     • detect them using the *old* grid
         #     • keep only the population that now has the largest value
         empty_mask = (self.grid <= EPS).all(dim=1, keepdim=True)    # (B,1,H,W)
@@ -155,11 +156,13 @@ class SquareSimulation:
         one_hot = torch.nn.functional.one_hot(argmax_pop, num_classes=P) \
                     .permute(0,3,1,2).bool()                   # (B,P,H,W)
 
+        # The actual donation are the contribution to both celected empty and non-empty cells
         actual_donnations = torch.where(empty_mask & one_hot, contrib, 0.0)  # (B,P,H,W)
+        actual_donnations += torch.where(~empty_mask, contrib, 0.0)  # (B,P,H,W)
 
         new_grid = self.grid + actual_donnations
 
-        #  4. if the *source* cell donated, take the 10 % penalty --------------------
+        #  5. if the *source* cell donated, take the 10 % penalty --------------------
         is_donor = (shifted_action >= 0) & (shifted_action <= 7)   # (B,1,H,W)
         new_grid = torch.where(is_donor, new_grid * (1 - DON), new_grid)
 
@@ -203,8 +206,12 @@ class SquareSimulation:
             defender_mapped_to_attacker_vals = torch.where(mask, defender_mapped_to_attacker_vals, torch.zeros_like(flat_grid))
             
             # Compute the value to subtract: the minimum of the two values.
+
+            #TODO
+            # attacker can win a fight if his fitness with the attack bonus is greater than the defender fitness
+            #vals = torch.where(attacker_vals*(1+self.ATTACK_BONUS) < defender_mapped_to_attacker_vals, attacker_vals, defender_mapped_to_attacker_vals)
             vals = torch.min(attacker_vals, defender_mapped_to_attacker_vals)
-            
+
             # Subtract val from the attacker cell.
             flat_grid = torch.where(mask, flat_grid - vals, flat_grid)
 

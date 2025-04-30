@@ -90,7 +90,8 @@ def get_rgb_map(simulation, ax, action_grid = None):
     rgb_map = np.zeros((rows, cols, 3))
 
     # Get the maximum fitness
-    max_fitness = 2 #grid0.max() # /!\ the max fitness is redefined at each step
+    max_fitness = grid0.max() # /!\ the max fitness is redefined at each step
+    #max_fitness = 1.5
     
     # Normalize the fitness values to the range [0.2, 1] to define the color intensity
     norm_fitness = np.clip(grid0/max_fitness, 0.2, 1).max(axis=0)
@@ -173,7 +174,7 @@ def run_visual_simulation_grid(simulation, interval=500, iterations=100, populat
             plt.savefig(filepath, dpi=300, bbox_inches='tight')
 
     def update(frame):
-        action_grid = simulation.configurable_actions_grid(type1='giving', type2='attacking', type3='complete')
+        action_grid = simulation.configurable_actions_grid(type1='giving', type2='attacking', type3='giving')
 
         #action_grid = random_action_grid(simulation.batch_size, simulation.rows, simulation.cols, simulation.device)
 
@@ -250,7 +251,9 @@ if __name__ == "__main__":
     #   - pop_ids: e.g., {"red": 0, "blue": 1, "green": 2}
     # and a method step() that updates grid.
     simulation = SquareSimulation(nb_batch=nb_batches, rows=rows, cols=cols,
-                                  populations=populations, device=device)
+                                  populations=populations, device=device,
+                                  FITNESS_DONATION_BONUS=0.0, FITNESS_GROWTH_VALUE=0.0)#, ATTACK_BONUS=float('inf')
+
     
     # Initialize the simulation grid (using your vectorized function).
     simulation.reset()
