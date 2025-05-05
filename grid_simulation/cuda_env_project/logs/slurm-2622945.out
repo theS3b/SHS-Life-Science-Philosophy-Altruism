@@ -1,0 +1,14 @@
+/home/delsad/SHS-Life-Science-Philosophy-Altruism/grid_simulation/cuda_env_project
+/home/delsad/SHS-Life-Science-Philosophy-Altruism/grid_simulation/cuda_env_project/results_creator.py:122: SyntaxWarning: invalid escape sequence '\%'
+  all_results_string = 'pop1 total fitness; pop2 total fitness; pop2 total fitness; pop1 \% fitness; pop 2 \% fitness; pop 3 \% fitness \n'
+/home/delsad/SHS-Life-Science-Philosophy-Altruism/grid_simulation/cuda_env_project/.pixi/envs/default/lib/python3.13/site-packages/torch/nn/utils/weight_norm.py:143: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)
+Creating simulation with parameters: bonus_0_0 - fitness_donation: 0.0 - fitness_growth: 0.0
+Creating simulation: attack vs random
+Traceback (most recent call last):
+  File "/home/delsad/SHS-Life-Science-Philosophy-Altruism/grid_simulation/cuda_env_project/results_creator.py", line 167, in <module>
+    results = get_results_imgs(simulation, iterations=iterations, save_dir=tmp_dir, type1='attacking', title=title)
+  File "/home/delsad/SHS-Life-Science-Philosophy-Altruism/grid_simulation/cuda_env_project/results_creator.py", line 74, in get_results_imgs
+    f"Population 1 ({type1}): {final1/total*100:.2f}%\n"
+                               ~~~~~~^~~~~~
+ZeroDivisionError: float division by zero

@@ -1,0 +1,953 @@
+/home/delsad/SHS-Life-Science-Philosophy-Altruism/grid_simulation/cuda_env_project
+/home/delsad/SHS-Life-Science-Philosophy-Altruism/grid_simulation/cuda_env_project/.pixi/envs/default/lib/python3.13/site-packages/torch/nn/utils/weight_norm.py:143: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [1.0000000149011612..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [1.0000000149011612..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [1.0000000149011612..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [1.0000000149011612..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [1.0000000149011612..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [1.0000000149011612..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [1.0000000149011612..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+
+=== Parameter set: bonus_0_0 (don=0.0, growth=0.0) ===
+Running scenario: attackVsRandom
+
+Final population fitness:
+Population 1 (attacking): 7.404117354781192e-07
+Population 2 (random): 0.0
+Population 3 (random): 0.0
+
+Total fitness: 7.404117354781192e-07
+
+Final population %'s fitness:
+Population 1 (attacking): 74.04%
+Population 2 (random): 0.00%
+Population 3 (random): 0.00%
+
+Running scenario: givingVsRandom
+
+Final population fitness:
+Population 1 (giving): 0.0
+Population 2 (random): 0.0
+Population 3 (random): 0.0
+
+Total fitness: 0.0
+
+Final population %'s fitness:
+Population 1 (giving): 0.00%
+Population 2 (random): 0.00%
+Population 3 (random): 0.00%
+
+Running scenario: completeVsRandom
+
+Final population fitness:
+Population 1 (complete): 0.0
+Population 2 (random): 0.0
+Population 3 (random): 0.0
+
+Total fitness: 0.0
+
+Final population %'s fitness:
+Population 1 (complete): 0.00%
+Population 2 (random): 0.00%
+Population 3 (random): 0.00%
+
+Running scenario: completeVsGivingVsAttacking
+
+Final population fitness:
+Population 1 (complete): 0.0
+Population 2 (giving): 0.0
+Population 3 (attacking): 26.84134864807129
+
+Total fitness: 26.84134864807129
+
+Final population %'s fitness:
+Population 1 (complete): 0.00%
+Population 2 (giving): 0.00%
+Population 3 (attacking): 100.00%
+
+Running scenario: RLAgentVsRandom
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 35.75999450683594
+Population 2 (random): 27.039583206176758
+Population 3 (random): 25.545923233032227
+
+Total fitness: 88.34550094604492
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 40.48%
+Population 2 (random): 30.61%
+Population 3 (random): 28.92%
+
+Running scenario: RLAgentVsAttacker
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 43.0746955871582
+Population 2 (attacking): 40.363101959228516
+Population 3 (attacking): 40.731571197509766
+
+Total fitness: 124.16936874389648
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 34.69%
+Population 2 (attacking): 32.51%
+Population 3 (attacking): 32.80%
+
+Running scenario: RLAgentVsGiving
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 44.12983703613281
+Population 2 (giving): 30.2771053314209
+Population 3 (giving): 30.094974517822266
+
+Total fitness: 104.50191688537598
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 42.23%
+Population 2 (giving): 28.97%
+Population 3 (giving): 28.80%
+
+
+=== Parameter set: bonus_0_04 (don=0.0, growth=0.04) ===
+Running scenario: attackVsRandom
+
+Final population fitness:
+Population 1 (attacking): 78.23209381103516
+Population 2 (random): 54.8299560546875
+Population 3 (random): 54.8299560546875
+
+Total fitness: 187.89200592041016
+
+Final population %'s fitness:
+Population 1 (attacking): 41.64%
+Population 2 (random): 29.18%
+Population 3 (random): 29.18%
+
+Running scenario: givingVsRandom
+
+Final population fitness:
+Population 1 (giving): 74.48675537109375
+Population 2 (random): 53.34865951538086
+Population 3 (random): 53.34865951538086
+
+Total fitness: 181.18407440185547
+
+Final population %'s fitness:
+Population 1 (giving): 41.11%
+Population 2 (random): 29.44%
+Population 3 (random): 29.44%
+
+Running scenario: completeVsRandom
+
+Final population fitness:
+Population 1 (complete): 74.3709716796875
+Population 2 (random): 53.328697204589844
+Population 3 (random): 53.328697204589844
+
+Total fitness: 181.0283660888672
+
+Final population %'s fitness:
+Population 1 (complete): 41.08%
+Population 2 (random): 29.46%
+Population 3 (random): 29.46%
+
+Running scenario: completeVsGivingVsAttacking
+
+Final population fitness:
+Population 1 (complete): 0.0
+Population 2 (giving): 0.0
+Population 3 (attacking): 14856.03125
+
+Total fitness: 14856.03125
+
+Final population %'s fitness:
+Population 1 (complete): 0.00%
+Population 2 (giving): 0.00%
+Population 3 (attacking): 100.00%
+
+Running scenario: RLAgentVsRandom
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 2215.59521484375
+Population 2 (random): 2172.6083984375
+Population 3 (random): 1809.660888671875
+
+Total fitness: 6197.864501953125
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 35.75%
+Population 2 (random): 35.05%
+Population 3 (random): 29.20%
+
+Running scenario: RLAgentVsAttacker
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 598.1525268554688
+Population 2 (attacking): 5363.6796875
+Population 3 (attacking): 4784.818359375
+
+Total fitness: 10746.650573730469
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 5.57%
+Population 2 (attacking): 49.91%
+Population 3 (attacking): 44.52%
+
+Running scenario: RLAgentVsGiving
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 3014.125732421875
+Population 2 (giving): 756.3270263671875
+Population 3 (giving): 701.1456909179688
+
+Total fitness: 4471.598449707031
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 67.41%
+Population 2 (giving): 16.91%
+Population 3 (giving): 15.68%
+
+
+=== Parameter set: bonus_04_0 (don=0.04, growth=0.0) ===
+Running scenario: attackVsRandom
+
+Final population fitness:
+Population 1 (attacking): 2.4821256374707446e-05
+Population 2 (random): 0.0
+Population 3 (random): 0.0
+
+Total fitness: 2.4821256374707446e-05
+
+Final population %'s fitness:
+Population 1 (attacking): 100.00%
+Population 2 (random): 0.00%
+Population 3 (random): 0.00%
+
+Running scenario: givingVsRandom
+
+Final population fitness:
+Population 1 (giving): 0.0
+Population 2 (random): 0.0
+Population 3 (random): 0.0
+
+Total fitness: 0.0
+
+Final population %'s fitness:
+Population 1 (giving): 0.00%
+Population 2 (random): 0.00%
+Population 3 (random): 0.00%
+
+Running scenario: completeVsRandom
+
+Final population fitness:
+Population 1 (complete): 0.0
+Population 2 (random): 0.0
+Population 3 (random): 0.0
+
+Total fitness: 0.0
+
+Final population %'s fitness:
+Population 1 (complete): 0.00%
+Population 2 (random): 0.00%
+Population 3 (random): 0.00%
+
+Running scenario: completeVsGivingVsAttacking
+
+Final population fitness:
+Population 1 (complete): 0.06351086497306824
+Population 2 (giving): 0.072391077876091
+Population 3 (attacking): 18.420690536499023
+
+Total fitness: 18.556592479348183
+
+Final population %'s fitness:
+Population 1 (complete): 0.34%
+Population 2 (giving): 0.39%
+Population 3 (attacking): 99.27%
+
+Running scenario: RLAgentVsRandom
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 39.01105499267578
+Population 2 (random): 29.881399154663086
+Population 3 (random): 28.192276000976562
+
+Total fitness: 97.08473014831543
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 40.18%
+Population 2 (random): 30.78%
+Population 3 (random): 29.04%
+
+Running scenario: RLAgentVsAttacker
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 52.39974594116211
+Population 2 (attacking): 49.976985931396484
+Population 3 (attacking): 50.467750549316406
+
+Total fitness: 152.844482421875
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 34.28%
+Population 2 (attacking): 32.70%
+Population 3 (attacking): 33.02%
+
+Running scenario: RLAgentVsGiving
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 172.24871826171875
+Population 2 (giving): 131.17410278320312
+Population 3 (giving): 162.93370056152344
+
+Total fitness: 466.3565216064453
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 36.93%
+Population 2 (giving): 28.13%
+Population 3 (giving): 34.94%
+
+
+=== Parameter set: bonus_04_04 (don=0.04, growth=0.04) ===
+Running scenario: attackVsRandom
+
+Final population fitness:
+Population 1 (attacking): 86.65141296386719
+Population 2 (random): 60.198978424072266
+Population 3 (random): 60.198978424072266
+
+Total fitness: 207.04936981201172
+
+Final population %'s fitness:
+Population 1 (attacking): 41.85%
+Population 2 (random): 29.07%
+Population 3 (random): 29.07%
+
+Running scenario: givingVsRandom
+
+Final population fitness:
+Population 1 (giving): 84.80842590332031
+Population 2 (random): 60.603939056396484
+Population 3 (random): 60.603939056396484
+
+Total fitness: 206.01630401611328
+
+Final population %'s fitness:
+Population 1 (giving): 41.17%
+Population 2 (random): 29.42%
+Population 3 (random): 29.42%
+
+Running scenario: completeVsRandom
+
+Final population fitness:
+Population 1 (complete): 84.80262756347656
+Population 2 (random): 60.644691467285156
+Population 3 (random): 60.644691467285156
+
+Total fitness: 206.09201049804688
+
+Final population %'s fitness:
+Population 1 (complete): 41.15%
+Population 2 (random): 29.43%
+Population 3 (random): 29.43%
+
+Running scenario: completeVsGivingVsAttacking
+
+Final population fitness:
+Population 1 (complete): 106.27296447753906
+Population 2 (giving): 96.47573852539062
+Population 3 (attacking): 11884.70703125
+
+Total fitness: 12087.45573425293
+
+Final population %'s fitness:
+Population 1 (complete): 0.88%
+Population 2 (giving): 0.80%
+Population 3 (attacking): 98.32%
+
+Running scenario: RLAgentVsRandom
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 2230.922119140625
+Population 2 (random): 2194.171630859375
+Population 3 (random): 1835.3472900390625
+
+Total fitness: 6260.4410400390625
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 35.64%
+Population 2 (random): 35.05%
+Population 3 (random): 29.32%
+
+Running scenario: RLAgentVsAttacker
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 554.0073852539062
+Population 2 (attacking): 5066.505859375
+Population 3 (attacking): 5214.0048828125
+
+Total fitness: 10834.518127441406
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 5.11%
+Population 2 (attacking): 46.76%
+Population 3 (attacking): 48.12%
+
+Running scenario: RLAgentVsGiving
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 6904.00439453125
+Population 2 (giving): 13103.9609375
+Population 3 (giving): 11859.845703125
+
+Total fitness: 31867.81103515625
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 21.66%
+Population 2 (giving): 41.12%
+Population 3 (giving): 37.22%
+
+
+=== Parameter set: bonus_08_0 (don=0.08, growth=0.0) ===
+Running scenario: attackVsRandom
+
+Final population fitness:
+Population 1 (attacking): 0.0006100711179897189
+Population 2 (random): 0.0
+Population 3 (random): 0.0
+
+Total fitness: 0.0006100711179897189
+
+Final population %'s fitness:
+Population 1 (attacking): 100.00%
+Population 2 (random): 0.00%
+Population 3 (random): 0.00%
+
+Running scenario: givingVsRandom
+
+Final population fitness:
+Population 1 (giving): 1596229.75
+Population 2 (random): 0.0
+Population 3 (random): 0.0
+
+Total fitness: 1596229.75
+
+Final population %'s fitness:
+Population 1 (giving): 100.00%
+Population 2 (random): 0.00%
+Population 3 (random): 0.00%
+
+Running scenario: completeVsRandom
+
+Final population fitness:
+Population 1 (complete): 1459343.125
+Population 2 (random): 0.0
+Population 3 (random): 0.0
+
+Total fitness: 1459343.125
+
+Final population %'s fitness:
+Population 1 (complete): 100.00%
+Population 2 (random): 0.00%
+Population 3 (random): 0.00%
+
+Running scenario: completeVsGivingVsAttacking
+
+Final population fitness:
+Population 1 (complete): 1433172443136.0
+Population 2 (giving): 2697139847168.0
+Population 3 (attacking): 0.0
+
+Total fitness: 4130312290304.0
+
+Final population %'s fitness:
+Population 1 (complete): 34.70%
+Population 2 (giving): 65.30%
+Population 3 (attacking): 0.00%
+
+Running scenario: RLAgentVsRandom
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 44.10490798950195
+Population 2 (random): 34.10066223144531
+Population 3 (random): 31.777408599853516
+
+Total fitness: 109.98297882080078
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 40.10%
+Population 2 (random): 31.01%
+Population 3 (random): 28.89%
+
+Running scenario: RLAgentVsAttacker
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 69.9173812866211
+Population 2 (attacking): 68.02005004882812
+Population 3 (attacking): 68.65873718261719
+
+Total fitness: 206.5961685180664
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 33.84%
+Population 2 (attacking): 32.92%
+Population 3 (attacking): 33.23%
+
+Running scenario: RLAgentVsGiving
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 244310605824.0
+Population 2 (giving): 1396730101760.0
+Population 3 (giving): 1790744592384.0
+
+Total fitness: 3431785299968.0
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 7.12%
+Population 2 (giving): 40.70%
+Population 3 (giving): 52.18%
+
+
+=== Parameter set: bonus_08_04 (don=0.08, growth=0.04) ===
+Running scenario: attackVsRandom
+
+Final population fitness:
+Population 1 (attacking): 97.45586395263672
+Population 2 (random): 66.91498565673828
+Population 3 (random): 66.91498565673828
+
+Total fitness: 231.28583526611328
+
+Final population %'s fitness:
+Population 1 (attacking): 42.14%
+Population 2 (random): 28.93%
+Population 3 (random): 28.93%
+
+Running scenario: givingVsRandom
+
+Final population fitness:
+Population 1 (giving): 98.66033172607422
+Population 2 (random): 70.23322296142578
+Population 3 (random): 70.23322296142578
+
+Total fitness: 239.12677764892578
+
+Final population %'s fitness:
+Population 1 (giving): 41.26%
+Population 2 (random): 29.37%
+Population 3 (random): 29.37%
+
+Running scenario: completeVsRandom
+
+Final population fitness:
+Population 1 (complete): 98.28228759765625
+Population 2 (random): 70.0168228149414
+Population 3 (random): 70.0168228149414
+
+Total fitness: 238.31593322753906
+
+Final population %'s fitness:
+Population 1 (complete): 41.24%
+Population 2 (random): 29.38%
+Population 3 (random): 29.38%
+
+Running scenario: completeVsGivingVsAttacking
+
+Final population fitness:
+Population 1 (complete): 5704919810048.0
+Population 2 (giving): 11735227432960.0
+Population 3 (attacking): 0.0
+
+Total fitness: 17440147243008.0
+
+Final population %'s fitness:
+Population 1 (complete): 32.71%
+Population 2 (giving): 67.29%
+Population 3 (attacking): 0.00%
+
+Running scenario: RLAgentVsRandom
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 2231.173828125
+Population 2 (random): 2196.18212890625
+Population 3 (random): 1847.6668701171875
+
+Total fitness: 6275.0228271484375
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 35.56%
+Population 2 (random): 35.00%
+Population 3 (random): 29.44%
+
+Running scenario: RLAgentVsAttacker
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 528.7687377929688
+Population 2 (attacking): 5092.93408203125
+Population 3 (attacking): 5048.6240234375
+
+Total fitness: 10670.326843261719
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 4.96%
+Population 2 (attacking): 47.73%
+Population 3 (attacking): 47.31%
+
+Running scenario: RLAgentVsGiving
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 3962054639616.0
+Population 2 (giving): 49229871448064.0
+Population 3 (giving): 63792922755072.0
+
+Total fitness: 116984848842752.0
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 3.39%
+Population 2 (giving): 42.08%
+Population 3 (giving): 54.53%
+
+
+=== Parameter set: bonus_0_08 (don=0.0, growth=0.08) ===
+Running scenario: attackVsRandom
+
+Final population fitness:
+Population 1 (attacking): 156.32582092285156
+Population 2 (random): 109.39122772216797
+Population 3 (random): 109.39122772216797
+
+Total fitness: 375.1082763671875
+
+Final population %'s fitness:
+Population 1 (attacking): 41.67%
+Population 2 (random): 29.16%
+Population 3 (random): 29.16%
+
+Running scenario: givingVsRandom
+
+Final population fitness:
+Population 1 (giving): 148.72792053222656
+Population 2 (random): 106.63475799560547
+Population 3 (random): 106.63475799560547
+
+Total fitness: 361.9974365234375
+
+Final population %'s fitness:
+Population 1 (giving): 41.09%
+Population 2 (random): 29.46%
+Population 3 (random): 29.46%
+
+Running scenario: completeVsRandom
+
+Final population fitness:
+Population 1 (complete): 148.84141540527344
+Population 2 (random): 106.84871673583984
+Population 3 (random): 106.84871673583984
+
+Total fitness: 362.5388488769531
+
+Final population %'s fitness:
+Population 1 (complete): 41.06%
+Population 2 (random): 29.47%
+Population 3 (random): 29.47%
+
+Running scenario: completeVsGivingVsAttacking
+
+Final population fitness:
+Population 1 (complete): 0.0
+Population 2 (giving): 0.0
+Population 3 (attacking): 29781.181640625
+
+Total fitness: 29781.181640625
+
+Final population %'s fitness:
+Population 1 (complete): 0.00%
+Population 2 (giving): 0.00%
+Population 3 (attacking): 100.00%
+
+Running scenario: RLAgentVsRandom
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 3842.65478515625
+Population 2 (random): 3775.907958984375
+Population 3 (random): 3152.593017578125
+
+Total fitness: 10771.15576171875
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 35.68%
+Population 2 (random): 35.06%
+Population 3 (random): 29.27%
+
+Running scenario: RLAgentVsAttacker
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 480.0165100097656
+Population 2 (attacking): 9735.5322265625
+Population 3 (attacking): 10477.2119140625
+
+Total fitness: 20692.760650634766
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 2.32%
+Population 2 (attacking): 47.05%
+Population 3 (attacking): 50.63%
+
+Running scenario: RLAgentVsGiving
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 4843.0419921875
+Population 2 (giving): 911.6851806640625
+Population 3 (giving): 856.14501953125
+
+Total fitness: 6610.8721923828125
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 73.26%
+Population 2 (giving): 13.79%
+Population 3 (giving): 12.95%
+
+
+=== Parameter set: bonus_04_08 (don=0.04, growth=0.08) ===
+Running scenario: attackVsRandom
+
+Final population fitness:
+Population 1 (attacking): 173.21060180664062
+Population 2 (random): 120.25511169433594
+Population 3 (random): 120.25511169433594
+
+Total fitness: 413.7208251953125
+
+Final population %'s fitness:
+Population 1 (attacking): 41.87%
+Population 2 (random): 29.07%
+Population 3 (random): 29.07%
+
+Running scenario: givingVsRandom
+
+Final population fitness:
+Population 1 (giving): 169.37200927734375
+Population 2 (random): 121.04387664794922
+Population 3 (random): 121.04387664794922
+
+Total fitness: 411.4597625732422
+
+Final population %'s fitness:
+Population 1 (giving): 41.16%
+Population 2 (random): 29.42%
+Population 3 (random): 29.42%
+
+Running scenario: completeVsRandom
+
+Final population fitness:
+Population 1 (complete): 169.20887756347656
+Population 2 (random): 120.98394012451172
+Population 3 (random): 120.98394012451172
+
+Total fitness: 411.1767578125
+
+Final population %'s fitness:
+Population 1 (complete): 41.15%
+Population 2 (random): 29.42%
+Population 3 (random): 29.42%
+
+Running scenario: completeVsGivingVsAttacking
+
+Final population fitness:
+Population 1 (complete): 149.65756225585938
+Population 2 (giving): 122.15245819091797
+Population 3 (attacking): 24691.76953125
+
+Total fitness: 24963.579551696777
+
+Final population %'s fitness:
+Population 1 (complete): 0.60%
+Population 2 (giving): 0.49%
+Population 3 (attacking): 98.91%
+
+Running scenario: RLAgentVsRandom
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 3890.557373046875
+Population 2 (random): 3838.501708984375
+Population 3 (random): 3249.15478515625
+
+Total fitness: 10978.2138671875
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 35.44%
+Population 2 (random): 34.96%
+Population 3 (random): 29.60%
+
+Running scenario: RLAgentVsAttacker
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 498.8851623535156
+Population 2 (attacking): 10155.88671875
+Population 3 (attacking): 10001.6484375
+
+Total fitness: 20656.420318603516
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 2.42%
+Population 2 (attacking): 49.17%
+Population 3 (attacking): 48.42%
+
+Running scenario: RLAgentVsGiving
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 9371.0009765625
+Population 2 (giving): 26602.58203125
+Population 3 (giving): 22377.875
+
+Total fitness: 58351.4580078125
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 16.06%
+Population 2 (giving): 45.59%
+Population 3 (giving): 38.35%
+
+
+=== Parameter set: bonus_08_08 (don=0.08, growth=0.08) ===
+Running scenario: attackVsRandom
+
+Final population fitness:
+Population 1 (attacking): 195.19515991210938
+Population 2 (random): 134.14259338378906
+Population 3 (random): 134.14259338378906
+
+Total fitness: 463.4803466796875
+
+Final population %'s fitness:
+Population 1 (attacking): 42.12%
+Population 2 (random): 28.94%
+Population 3 (random): 28.94%
+
+Running scenario: givingVsRandom
+
+Final population fitness:
+Population 1 (giving): 197.7553253173828
+Population 2 (random): 140.65829467773438
+Population 3 (random): 140.65829467773438
+
+Total fitness: 479.07191467285156
+
+Final population %'s fitness:
+Population 1 (giving): 41.28%
+Population 2 (random): 29.36%
+Population 3 (random): 29.36%
+
+Running scenario: completeVsRandom
+
+Final population fitness:
+Population 1 (complete): 197.32504272460938
+Population 2 (random): 140.5448760986328
+Population 3 (random): 140.5448760986328
+
+Total fitness: 478.414794921875
+
+Final population %'s fitness:
+Population 1 (complete): 41.25%
+Population 2 (random): 29.38%
+Population 3 (random): 29.38%
+
+Running scenario: completeVsGivingVsAttacking
+
+Final population fitness:
+Population 1 (complete): 10873319981056.0
+Population 2 (giving): 20858202488832.0
+Population 3 (attacking): 30.624128341674805
+
+Total fitness: 31731522469918.625
+
+Final population %'s fitness:
+Population 1 (complete): 34.27%
+Population 2 (giving): 65.73%
+Population 3 (attacking): 0.00%
+
+Running scenario: RLAgentVsRandom
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 3959.7373046875
+Population 2 (random): 3899.87890625
+Population 3 (random): 3300.176025390625
+
+Total fitness: 11159.792236328125
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 35.48%
+Population 2 (random): 34.95%
+Population 3 (random): 29.57%
+
+Running scenario: RLAgentVsAttacker
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 438.40142822265625
+Population 2 (attacking): 9302.5322265625
+Population 3 (attacking): 10977.728515625
+
+Total fitness: 20718.662170410156
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 2.12%
+Population 2 (attacking): 44.90%
+Population 3 (attacking): 52.98%
+
+Running scenario: RLAgentVsGiving
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 7493241012224.0
+Population 2 (giving): 121430972825600.0
+Population 3 (giving): 147518285414400.0
+
+Total fitness: 276442499252224.0
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 2.71%
+Population 2 (giving): 43.93%
+Population 3 (giving): 53.36%
+
+
+All simulations complete. Summary written to /home/delsad/SHS-Life-Science-Philosophy-Altruism/simulation_imgs/results_summary.txt

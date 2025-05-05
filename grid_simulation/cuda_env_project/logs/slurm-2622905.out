@@ -1,0 +1,12 @@
+/home/delsad/SHS-Life-Science-Philosophy-Altruism/grid_simulation/cuda_env_project
+results_creator.py: line 2: import: command not found
+results_creator.py: line 3: import: command not found
+results_creator.py: line 4: from: command not found
+results_creator.py: line 5: import: command not found
+results_creator.py: line 6: import: command not found
+results_creator.py: line 8: from: command not found
+results_creator.py: line 9: from: command not found
+results_creator.py: line 10: from: command not found
+results_creator.py: line 16: from: command not found
+results_creator.py: line 18: syntax error near unexpected token `('
+results_creator.py: line 18: `obs_shape = (3, 5, 5)'

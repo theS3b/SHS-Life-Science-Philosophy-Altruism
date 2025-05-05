@@ -94,7 +94,7 @@ def get_rgb_map(simulation, ax, action_grid = None):
     #max_fitness = 1.5
     
     # Normalize the fitness values to the range [0.2, 1] to define the color intensity
-    norm_fitness = np.clip(grid0/max_fitness, 0.2, 1).max(axis=0)
+    norm_fitness = np.clip(grid0/max(max_fitness, 1e-6), 0.2, 1).max(axis=0)
 
     # clear old texts
     if(action_grid is not None):

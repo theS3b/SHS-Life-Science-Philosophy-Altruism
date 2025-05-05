@@ -1,0 +1,427 @@
+/home/delsad/SHS-Life-Science-Philosophy-Altruism/grid_simulation/cuda_env_project
+/home/delsad/SHS-Life-Science-Philosophy-Altruism/grid_simulation/cuda_env_project/.pixi/envs/default/lib/python3.13/site-packages/torch/nn/utils/weight_norm.py:143: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [1.0000000149011612..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [1.0000000149011612..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [1.0000000149011612..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [1.0000000149011612..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [1.0000000149011612..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [1.0000000149011612..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [0.2..1.0000000149011612].
+
+=== Parameter set: bonus_0_0 (don=0.0, growth=0.0) ===
+Running scenario: attackVsRandom
+
+Final population fitness:
+Population 1 (attacking): 0.0
+Population 2 (random): 0.0
+Population 3 (random): 0.0
+
+Total fitness: 0.0
+
+Final population %'s fitness:
+Population 1 (attacking): 0.00%
+Population 2 (random): 0.00%
+Population 3 (random): 0.00%
+
+Running scenario: givingVsRandom
+
+Final population fitness:
+Population 1 (giving): 0.0
+Population 2 (random): 0.0
+Population 3 (random): 0.0
+
+Total fitness: 0.0
+
+Final population %'s fitness:
+Population 1 (giving): 0.00%
+Population 2 (random): 0.00%
+Population 3 (random): 0.00%
+
+Running scenario: completeVsRandom
+
+Final population fitness:
+Population 1 (complete): 0.0
+Population 2 (random): 0.0
+Population 3 (random): 0.0
+
+Total fitness: 0.0
+
+Final population %'s fitness:
+Population 1 (complete): 0.00%
+Population 2 (random): 0.00%
+Population 3 (random): 0.00%
+
+Running scenario: completeVsGivingVsAttacking
+
+Final population fitness:
+Population 1 (complete): 0.0
+Population 2 (giving): 0.0
+Population 3 (attacking): 26.84669303894043
+
+Total fitness: 26.84669303894043
+
+Final population %'s fitness:
+Population 1 (complete): 0.00%
+Population 2 (giving): 0.00%
+Population 3 (attacking): 100.00%
+
+Running scenario: RLAgentVsRandom
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 35.32218933105469
+Population 2 (random): 26.61073875427246
+Population 3 (random): 25.41292953491211
+
+Total fitness: 87.34585762023926
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 40.44%
+Population 2 (random): 30.47%
+Population 3 (random): 29.09%
+
+Running scenario: RLAgentVsAttacker
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 41.5205192565918
+Population 2 (attacking): 39.05883026123047
+Population 3 (attacking): 39.25749588012695
+
+Total fitness: 119.83684539794922
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 34.65%
+Population 2 (attacking): 32.59%
+Population 3 (attacking): 32.76%
+
+Running scenario: RLAgentVsGiving
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 44.57278060913086
+Population 2 (giving): 30.385778427124023
+Population 3 (giving): 30.477375030517578
+
+Total fitness: 105.43593406677246
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 42.27%
+Population 2 (giving): 28.82%
+Population 3 (giving): 28.91%
+
+
+=== Parameter set: bonus_0_04 (don=0.0, growth=0.04) ===
+Running scenario: attackVsRandom
+
+Final population fitness:
+Population 1 (attacking): 78.22914123535156
+Population 2 (random): 54.709930419921875
+Population 3 (random): 54.709930419921875
+
+Total fitness: 187.6490020751953
+
+Final population %'s fitness:
+Population 1 (attacking): 41.69%
+Population 2 (random): 29.16%
+Population 3 (random): 29.16%
+
+Running scenario: givingVsRandom
+
+Final population fitness:
+Population 1 (giving): 74.34906768798828
+Population 2 (random): 53.326324462890625
+Population 3 (random): 53.326324462890625
+
+Total fitness: 181.00171661376953
+
+Final population %'s fitness:
+Population 1 (giving): 41.08%
+Population 2 (random): 29.46%
+Population 3 (random): 29.46%
+
+Running scenario: completeVsRandom
+
+Final population fitness:
+Population 1 (complete): 74.51502227783203
+Population 2 (random): 53.395450592041016
+Population 3 (random): 53.395450592041016
+
+Total fitness: 181.30592346191406
+
+Final population %'s fitness:
+Population 1 (complete): 41.10%
+Population 2 (random): 29.45%
+Population 3 (random): 29.45%
+
+Running scenario: completeVsGivingVsAttacking
+
+Final population fitness:
+Population 1 (complete): 0.1484295129776001
+Population 2 (giving): 0.05174962058663368
+Population 3 (attacking): 14860.1708984375
+
+Total fitness: 14860.371077571064
+
+Final population %'s fitness:
+Population 1 (complete): 0.00%
+Population 2 (giving): 0.00%
+Population 3 (attacking): 100.00%
+
+Running scenario: RLAgentVsRandom
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 2221.037109375
+Population 2 (random): 2181.3291015625
+Population 3 (random): 1825.3634033203125
+
+Total fitness: 6227.7296142578125
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 35.66%
+Population 2 (random): 35.03%
+Population 3 (random): 29.31%
+
+Running scenario: RLAgentVsAttacker
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 574.4161376953125
+Population 2 (attacking): 4981.2890625
+Population 3 (attacking): 5238.421875
+
+Total fitness: 10794.127075195312
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 5.32%
+Population 2 (attacking): 46.15%
+Population 3 (attacking): 48.53%
+
+Running scenario: RLAgentVsGiving
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 3037.602783203125
+Population 2 (giving): 772.4239501953125
+Population 3 (giving): 705.2388916015625
+
+Total fitness: 4515.265625
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 67.27%
+Population 2 (giving): 17.11%
+Population 3 (giving): 15.62%
+
+
+=== Parameter set: bonus_04_0 (don=0.04, growth=0.0) ===
+Running scenario: attackVsRandom
+
+Final population fitness:
+Population 1 (attacking): 2.2495478333439678e-05
+Population 2 (random): 0.0
+Population 3 (random): 0.0
+
+Total fitness: 2.2495478333439678e-05
+
+Final population %'s fitness:
+Population 1 (attacking): 100.00%
+Population 2 (random): 0.00%
+Population 3 (random): 0.00%
+
+Running scenario: givingVsRandom
+
+Final population fitness:
+Population 1 (giving): 0.0
+Population 2 (random): 0.0
+Population 3 (random): 0.0
+
+Total fitness: 0.0
+
+Final population %'s fitness:
+Population 1 (giving): 0.00%
+Population 2 (random): 0.00%
+Population 3 (random): 0.00%
+
+Running scenario: completeVsRandom
+
+Final population fitness:
+Population 1 (complete): 0.0
+Population 2 (random): 0.0
+Population 3 (random): 0.0
+
+Total fitness: 0.0
+
+Final population %'s fitness:
+Population 1 (complete): 0.00%
+Population 2 (random): 0.00%
+Population 3 (random): 0.00%
+
+Running scenario: completeVsGivingVsAttacking
+
+Final population fitness:
+Population 1 (complete): 0.06500159204006195
+Population 2 (giving): 0.058428023010492325
+Population 3 (attacking): 18.14748764038086
+
+Total fitness: 18.270917255431414
+
+Final population %'s fitness:
+Population 1 (complete): 0.36%
+Population 2 (giving): 0.32%
+Population 3 (attacking): 99.32%
+
+Running scenario: RLAgentVsRandom
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 39.09073257446289
+Population 2 (random): 29.75630760192871
+Population 3 (random): 27.97996711730957
+
+Total fitness: 96.82700729370117
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 40.37%
+Population 2 (random): 30.73%
+Population 3 (random): 28.90%
+
+Running scenario: RLAgentVsAttacker
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 51.95061492919922
+Population 2 (attacking): 49.84434127807617
+Population 3 (attacking): 50.064029693603516
+
+Total fitness: 151.8589859008789
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 34.21%
+Population 2 (attacking): 32.82%
+Population 3 (attacking): 32.97%
+
+Running scenario: RLAgentVsGiving
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 168.9119415283203
+Population 2 (giving): 143.57424926757812
+Population 3 (giving): 147.94444274902344
+
+Total fitness: 460.4306335449219
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 36.69%
+Population 2 (giving): 31.18%
+Population 3 (giving): 32.13%
+
+
+=== Parameter set: bonus_04_04 (don=0.04, growth=0.04) ===
+Running scenario: attackVsRandom
+
+Final population fitness:
+Population 1 (attacking): 86.59686279296875
+Population 2 (random): 60.08496856689453
+Population 3 (random): 60.08496856689453
+
+Total fitness: 206.7667999267578
+
+Final population %'s fitness:
+Population 1 (attacking): 41.88%
+Population 2 (random): 29.06%
+Population 3 (random): 29.06%
+
+Running scenario: givingVsRandom
+
+Final population fitness:
+Population 1 (giving): 84.81803894042969
+Population 2 (random): 60.454002380371094
+Population 3 (random): 60.454002380371094
+
+Total fitness: 205.72604370117188
+
+Final population %'s fitness:
+Population 1 (giving): 41.23%
+Population 2 (random): 29.39%
+Population 3 (random): 29.39%
+
+Running scenario: completeVsRandom
+
+Final population fitness:
+Population 1 (complete): 84.84689331054688
+Population 2 (random): 60.546058654785156
+Population 3 (random): 60.546058654785156
+
+Total fitness: 205.9390106201172
+
+Final population %'s fitness:
+Population 1 (complete): 41.20%
+Population 2 (random): 29.40%
+Population 3 (random): 29.40%
+
+Running scenario: completeVsGivingVsAttacking
+
+Final population fitness:
+Population 1 (complete): 99.17382049560547
+Population 2 (giving): 93.260986328125
+Population 3 (attacking): 11966.0380859375
+
+Total fitness: 12158.47289276123
+
+Final population %'s fitness:
+Population 1 (complete): 0.82%
+Population 2 (giving): 0.77%
+Population 3 (attacking): 98.42%
+
+Running scenario: RLAgentVsRandom
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 2238.61181640625
+Population 2 (random): 2198.024658203125
+Population 3 (random): 1849.0433349609375
+
+Total fitness: 6285.6798095703125
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 35.61%
+Population 2 (random): 34.97%
+Population 3 (random): 29.42%
+
+Running scenario: RLAgentVsAttacker
+
+Final population fitness:
+Population 1 (Reinforcement Learning Agent): 553.5155029296875
+Population 2 (attacking): 5067.80419921875
+Population 3 (attacking): 5078.41455078125
+
+Total fitness: 10699.734252929688
+
+Final population %'s fitness:
+Population 1 (Reinforcement Learning Agent): 5.17%
+Population 2 (attacking): 47.36%
+Population 3 (attacking): 47.46%
+
+Running scenario: RLAgentVsGiving
+Traceback (most recent call last):
+  File "/home/delsad/SHS-Life-Science-Philosophy-Altruism/grid_simulation/cuda_env_project/results_creator.py", line 182, in <module>
+    res = get_results_imgs(
+        sim,
+    ...<3 lines>...
+        title=title
+    )
+  File "/home/delsad/SHS-Life-Science-Philosophy-Altruism/grid_simulation/cuda_env_project/results_creator.py", line 51, in get_results_imgs
+    observations, obs_indices = simulation.get_deep_observations(0)
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/home/delsad/SHS-Life-Science-Philosophy-Altruism/grid_simulation/cuda_env_project/cuda_square_simulation.py", line 370, in get_deep_observations
+    patches_of_interest = patches_[batch_idx, :, :, y_idx, x_idx]  # shape: (N, C, 25)
+                          ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 32.00 MiB. GPU 0 has a total capacity of 31.74 GiB of which 37.12 MiB is free. Including non-PyTorch memory, this process has 31.70 GiB memory in use. Of the allocated memory 28.84 GiB is allocated by PyTorch, and 2.45 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
