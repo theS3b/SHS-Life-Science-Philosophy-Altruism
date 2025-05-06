@@ -4,10 +4,21 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import matplotlib.colors as mcolors
 from cuda_square_simulation import SquareSimulation
+from agent import select_action, clever_single_action
 
 # Set KMP_DUPLICATE_LIB_OK to avoid errors with MKL and PyTorch
 import os
 os.environ["KMP_DUPLICATE_LIB_OK"] = "True"
+
+from agent import PolicyNet
+
+obs_shape = (3, 5, 5)
+policy_net = PolicyNet(obs_shape)
+policy_net.load_state_dict(torch.load(os.path.join(os.getcwd(), 'grid_simulation/cuda_env_project', 'policy_net.pth'),
+                                      map_location=torch.device('cpu')
+                                      ))
+policy_net.eval()
+
 
 # --------------------------
 # Helper function to extract batch 0 labels
@@ -99,8 +110,8 @@ def get_rgb_map(simulation, ax, action_grid = None):
     # clear old texts
     if(action_grid is not None):
         text_objects = []
-        for text in ax.texts:
-            text.set_text('')
+        for text in ax.texts[:]:
+            text.remove()
     
     # Create the RGB map
     # Iterate through each cell and assign colors based on the population label
@@ -140,7 +151,7 @@ def run_visual_simulation_grid(simulation, interval=500, iterations=100, populat
     :param population_colors: List of color names corresponding to the populations.
            If None, defaults to ['red', 'blue', 'green'].
     """
-    SAVE_DIR = os.path.join(os.getcwd(), 'simulation_imgs/FULL_SIMULATION')
+    SAVE_DIR = os.path.join(os.getcwd(), 'FULL_SIMULATION/RL_attacking_attacking_08_0_seed42_fitmax')
 
     if not os.path.exists(SAVE_DIR):
         os.makedirs(SAVE_DIR)
@@ -174,7 +185,21 @@ def run_visual_simulation_grid(simulation, interval=500, iterations=100, populat
             plt.savefig(filepath, dpi=300, bbox_inches='tight')
 
     def update(frame):
-        action_grid = simulation.configurable_actions_grid(type1='giving', type2='attacking', type3='giving')
+
+        type1 = 'Reinforcement Learning Agent'
+        type2 = 'attacking'
+        type3 = 'attacking'
+
+        if type1 == 'Reinforcement Learning Agent':
+            action_grid = simulation.configurable_actions_grid(type1=None, type2=type2, type3=type3)
+
+            with torch.no_grad():
+                observations, obs_indices = simulation.get_deep_observations(0)
+                action = select_action(policy_net, observations)
+                action_grid = clever_single_action(simulation, action, obs_indices, type2, type3) 
+
+        else:
+            action_grid = simulation.configurable_actions_grid(type1=type1, type2=type2, type3=type3)
 
         #action_grid = random_action_grid(simulation.batch_size, simulation.rows, simulation.cols, simulation.device)
 
@@ -230,6 +255,14 @@ if __name__ == "__main__":
     
     # Example: define parameters and create the simulation.
 
+    seed = 42
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+
+
     nb_batches = 1
     rows, cols = 20, 20
     populations = {
@@ -252,12 +285,12 @@ if __name__ == "__main__":
     # and a method step() that updates grid.
     simulation = SquareSimulation(nb_batch=nb_batches, rows=rows, cols=cols,
                                   populations=populations, device=device,
-                                  FITNESS_DONATION_BONUS=0.0, FITNESS_GROWTH_VALUE=0.0)#, ATTACK_BONUS=float('inf')
+                                  FITNESS_DONATION_BONUS=0.04, FITNESS_GROWTH_VALUE=0.0)
 
     
     # Initialize the simulation grid (using your vectorized function).
     simulation.reset()
     
     # Run the visual simulation for batch 0.
-    SAVE_FILE= 'test.pdf'
-    run_visual_simulation_grid(simulation, interval=50, iterations=1000, save_file=None)
+    SAVE_FILE= 'img.pdf'
+    run_visual_simulation_grid(simulation, interval=50, iterations=1000, save_file=SAVE_FILE)
