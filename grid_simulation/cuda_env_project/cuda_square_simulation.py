@@ -159,11 +159,12 @@ class SquareSimulation:
         # The actual donation are the contribution to both selected empty and non-empty cells
         actual_donnations = torch.where(empty_mask & one_hot, contrib, 0.0)  # (B,P,H,W)
 
-        _, argmax_pop = self.grid.max(dim=1) 
+        _, argmax_pop = self.grid.max(dim=1)
         population_ont_hot = torch.nn.functional.one_hot(argmax_pop, num_classes=P) \
-                    .permute(0,3,1,2).bool()
-        actual_donnations += torch.where(~empty_mask & population_ont_hot, contrib, 0.0)  # (B,P,H,W)
+                    .permute(0,3,1,2).bool()                    # (B,P,H,W)
+        actual_donnations += torch.where(~empty_mask & population_ont_hot, contrib.sum(dim=1), 0.0)  # (B,P,H,W)
 
+        #actual_donnations += torch.where(~empty_mask, contrib, 0.0)  # (B,P,H,W)
 
         new_grid = self.grid + actual_donnations
 
